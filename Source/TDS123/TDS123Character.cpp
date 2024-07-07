@@ -48,4 +48,33 @@ ATDS123Character::ATDS123Character()
 void ATDS123Character::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+
+    MovementTick(DeltaSeconds);
+}
+
+    void ATDS123Character::SetupPlayerInputComponent(UInputComponent* InputComponent)
+{
+    Super::SetupPlayerInputComponent(InputComponent);
+
+    InputComponent->BindAxis(TEXT("MoveForward"), this, &ATDS123Character::InputAxisX);
+    InputComponent->BindAxis(TEXT("MoveRight"), this, &ATDS123Character::InputAxisY);
+}
+
+void ATDS123Character::InputAxisX(float Value)
+{
+    AxisX = Value;
+}
+
+void ATDS123Character::InputAxisY(float Value)
+{
+    AxisY = Value;
+}
+
+void ATDS123Character::MovementTick(float DeltaTime)
+{
+    
+    AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisX);
+    AddMovementInput(FVector(0.0f, 1.0f, 0.0f), AxisY);
+
+    
 }
