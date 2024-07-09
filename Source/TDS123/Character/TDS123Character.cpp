@@ -9,6 +9,8 @@
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Materials/Material.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Engine/World.h"
 
 ATDS123Character::ATDS123Character()
@@ -52,12 +54,13 @@ void ATDS123Character::Tick(float DeltaSeconds)
     MovementTick(DeltaSeconds);
 }
 
-    void ATDS123Character::SetupPlayerInputComponent(UInputComponent* InputComponent)
+    void ATDS123Character::SetupPlayerInputComponent(UInputComponent* NewInputComponent)
 {
-    Super::SetupPlayerInputComponent(InputComponent);
+    Super::SetupPlayerInputComponent(NewInputComponent);
 
-    InputComponent->BindAxis(TEXT("MoveForward"), this, &ATDS123Character::InputAxisX);
-    InputComponent->BindAxis(TEXT("MoveRight"), this, &ATDS123Character::InputAxisY);
+    NewInputComponent->BindAxis(TEXT("MoveForward"), this, &ATDS123Character::InputAxisX);
+    NewInputComponent->BindAxis(TEXT("MoveRight"), this, &ATDS123Character::InputAxisY);
+
 }
 
 void ATDS123Character::InputAxisX(float Value)
@@ -76,5 +79,14 @@ void ATDS123Character::MovementTick(float DeltaTime)
     AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisX);
     AddMovementInput(FVector(0.0f, 1.0f, 0.0f), AxisY);
 
+    APlayerController* myController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+    if (myController)
+    {
+        FHitResult ResultHit;
+        myController->GetHitResultUnderCursorByChannel(ETraceTypeQuery::TraceTypeQuery6, false, ResultHit);
+        float FindRotaterResultYaw = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ResultHit.Location).Yaw;
+        SetActorRotation(FQuat(FRotator(0.0f, FindRotaterResultYaw, 0.0f)));
+    }
+    
     
 }
