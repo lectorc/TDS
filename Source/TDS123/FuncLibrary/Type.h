@@ -2,14 +2,11 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
+#include "Types.generated.h"
 
-/**
- * 
- */
-class TDS123_API Type
+UCLASS()
+class TDS123_API UTypes : public UBlueprintFunctionLibrary
 {
-public:
-	Type();
-	~Type();
+    GENERATED_BODY()
 };
