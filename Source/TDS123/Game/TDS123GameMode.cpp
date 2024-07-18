@@ -2,7 +2,7 @@
 
 #include "TDS123GameMode.h"
 #include "TDS123PlayerController.h"
-#include "Character/TDS123Character.h"
+#include "TDS123/Character/TDS123Character.h"
 #include "UObject/ConstructorHelpers.h"
 
 ATDS123GameMode::ATDS123GameMode()
