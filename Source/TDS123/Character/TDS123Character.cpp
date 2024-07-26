@@ -105,6 +105,9 @@ void ATDS123Character::CharacterUpdate()
     case EMovementState::Run_State:
         ResSpeed = MovementInfo.RunSpeed;
         break;
+    case EMovementState::Sprint_State:
+        ResSpeed = MovementInfo.SprintSpeed;
+        AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisX); 
     default:
         break;
     }
