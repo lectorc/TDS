@@ -52,6 +52,7 @@ void ATDS123Character::Tick(float DeltaSeconds)
     Super::Tick(DeltaSeconds);
 
     MovementTick(DeltaSeconds);
+
 }
 
     void ATDS123Character::SetupPlayerInputComponent(UInputComponent* NewInputComponent)
@@ -120,3 +121,14 @@ void ATDS123Character::ChangeMovementState(EMovementState NewMovementState)
     MovementState = NewMovementState;
     CharacterUpdate();
 }
+
+void ATDS123Character::BlockMovementVector()
+{
+    FVector CharacterMovement;
+    FVector ForwardVector;
+    GetActorForwardVector() = ForwardVector;
+    GetCharacterMovement() = CharacterMovement;
+}
+
+
+

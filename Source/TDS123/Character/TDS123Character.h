@@ -25,6 +25,8 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
+    bool IsSprintForward = false;
+
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -55,7 +57,12 @@ public:
     UFUNCTION(BlueprintCallable)
         void CharacterUpdate();
 
-        UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable)
         void ChangeMovementState(EMovementState NewMovementState);
+    
+    
+
+    UFUNCTION()
+    void BlockMovementVector();
 };
 
