@@ -126,8 +126,10 @@ void ATDS123Character::BlockMovementVector()
 {
     FVector CharacterMovement;
     FVector ForwardVector;
+    FVector Multiply;
     GetActorForwardVector() = ForwardVector;
-    GetCharacterMovement() = CharacterMovement;
+    GetCharacterMovement()->GetLastInputVector() = CharacterMovement;
+    Multiply = ForwardVector * CharacterMovement;
 }
 
 
