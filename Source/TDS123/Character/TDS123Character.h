@@ -59,7 +59,9 @@ public:
 
     UFUNCTION(BlueprintCallable)
         void ChangeMovementState(EMovementState NewMovementState);
-    
+
+    UFUNCTION(BlueprintCallable)
+    void ChangeBlockedSprint();
     
 
     UFUNCTION()
