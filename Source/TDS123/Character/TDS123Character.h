@@ -64,7 +64,7 @@ public:
     void ChangeBlockedSprint();
     
 
-    UFUNCTION()
+    UFUNCTION(BlueprintCallable)
     void BlockMovementVector();
 };
 

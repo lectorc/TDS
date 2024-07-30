@@ -129,16 +129,16 @@ void ATDS123Character::ChangeBlockedSprint()
 
 void ATDS123Character::BlockMovementVector()
 {
-    FVector CharacterMovement;
+    FVector InputCharacterMovement;
     FVector ForwardVector;
     GetActorForwardVector() = ForwardVector;
-    GetCharacterMovement()->GetLastInputVector() = CharacterMovement;
-    float DotProductResult = FVector::DotProduct(CharacterMovement.GetSafeNormal(), ForwardVector.GetSafeNormal());
+    GetCharacterMovement()->GetLastInputVector() = InputCharacterMovement;
+    float DotProductResult = FVector::DotProduct(InputCharacterMovement.GetSafeNormal(), ForwardVector.GetSafeNormal());
     float AngleInRadians = FMath::Acos(DotProductResult);
     float AngleInDegrees = FMath::RadiansToDegrees(AngleInRadians);
     if (AngleInDegrees > 30)
     {
-        ChangeBlockedSprint;
+        MovementState = EMovementState::Run_State;
     }
 }
 
