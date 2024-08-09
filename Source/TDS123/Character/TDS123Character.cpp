@@ -53,6 +53,8 @@ void ATDS123Character::Tick(float DeltaSeconds)
 
     MovementTick(DeltaSeconds);
 
+    BlockMovementVector();
+
 }
 
     void ATDS123Character::SetupPlayerInputComponent(UInputComponent* NewInputComponent)
@@ -139,6 +141,13 @@ void ATDS123Character::BlockMovementVector()
     if (AngleInDegrees > 30)
     {
         MovementState = EMovementState::Run_State;
+        CharacterUpdate();
+
+    }
+    else
+    {
+        MovementState = EMovementState::Sprint_State;
+        CharacterUpdate();
     }
 }
 
