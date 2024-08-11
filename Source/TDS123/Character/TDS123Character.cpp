@@ -133,22 +133,23 @@ void ATDS123Character::BlockMovementVector()
 {
     FVector InputCharacterMovement;
     FVector ForwardVector;
-    GetActorForwardVector() = ForwardVector;
-    GetCharacterMovement()->GetLastInputVector() = InputCharacterMovement;
+    ForwardVector = GetActorForwardVector();
+    InputCharacterMovement = GetCharacterMovement()->GetLastInputVector();
     float DotProductResult = FVector::DotProduct(InputCharacterMovement.GetSafeNormal(), ForwardVector.GetSafeNormal());
     float AngleInRadians = FMath::Acos(DotProductResult);
     float AngleInDegrees = FMath::RadiansToDegrees(AngleInRadians);
     if (AngleInDegrees > 30)
     {
         MovementState = EMovementState::Run_State;
-        CharacterUpdate();
+        
 
     }
     else
     {
         MovementState = EMovementState::Sprint_State;
-        CharacterUpdate();
+        
     }
+    CharacterUpdate();
 }
 
 
