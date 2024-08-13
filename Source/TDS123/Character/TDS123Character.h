@@ -24,8 +24,9 @@ public:
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-
+    
     bool IsSprintForward = false;
+    bool SprintEnabled = false;
 
 private:
 	/** Top down camera */
@@ -66,5 +67,9 @@ public:
 
     UFUNCTION(BlueprintCallable)
     void BlockMovementVector();
+
+    UFUNCTION(BlueprintCallable)
+    void StaminaSystem();
+
 };
 
