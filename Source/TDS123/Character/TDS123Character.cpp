@@ -141,7 +141,7 @@ void ATDS123Character::BlockMovementVector()
     if (AngleInDegrees > 30)
     {
         MovementState = EMovementState::Run_State;
-        SprintEnabled = true; 
+        
 
     }
     else
@@ -154,17 +154,29 @@ void ATDS123Character::BlockMovementVector()
 
 void ATDS123Character::StaminaSystem()
 {
-    float Stamina;
-    float MaxStamina;
-    if (SprintEnabled = false)
+    float Stamina = 1.0f;
+    float MaxStamina = 1.0f;
+    if (SprintEnabled == false)
     {
         if (Stamina > 0.0f)
         {
             SprintEnabled = true;
             MovementState = EMovementState::Sprint_State;
+            Stamina = FMath::Clamp(Stamina - 0.5, 0, MaxStamina);
+            
 
         }
+        else
+        {
+            MovementState = EMovementState::Walk_State;
+            SprintEnabled = false;
+            if (Stamina != MaxStamina)
+            {
+                Stamina = FMath::Clamp(Stamina + 0.3, 0, MaxStamina);
+            }
+        }
     }
+    CharacterUpdate();
 }
 
 
