@@ -26,7 +26,7 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
     
     bool IsSprintForward = false;
-    bool SprintEnabled = false;
+    
 
 private:
 	/** Top down camera */
@@ -70,6 +70,12 @@ public:
 
     UFUNCTION(BlueprintCallable)
     void StaminaSystem();
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Motion")
+    float Stamina = 1.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Motion")
+    bool SprintEnabled = false;
 
 };
 
