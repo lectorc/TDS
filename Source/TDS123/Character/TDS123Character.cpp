@@ -141,12 +141,14 @@ void ATDS123Character::BlockMovementVector()
     if (AngleInDegrees > 30)
     {
         MovementState = EMovementState::Walk_State;
+        SprintEnabled = false;
         
 
     }
     else
     {
         MovementState = EMovementState::Sprint_State;
+        SprintEnabled = true;
         
     }
     CharacterUpdate();
