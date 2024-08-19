@@ -55,6 +55,8 @@ void ATDS123Character::Tick(float DeltaSeconds)
 
     BlockMovementVector();
 
+    StaminaSystem();
+
 }
 
     void ATDS123Character::SetupPlayerInputComponent(UInputComponent* NewInputComponent)
@@ -63,6 +65,10 @@ void ATDS123Character::Tick(float DeltaSeconds)
 
     NewInputComponent->BindAxis(TEXT("MoveForward"), this, &ATDS123Character::InputAxisX);
     NewInputComponent->BindAxis(TEXT("MoveRight"), this, &ATDS123Character::InputAxisY);
+    NewInputComponent->BindAction("Sprint", IE_Pressed, this, &ATDS123Character::ChangeMovementStateToSprint);
+    NewInputComponent->BindAction("Sprint", IE_Released, this, &ATDS123Character::ChangeMovementStateToRun);
+    NewInputComponent->BindAction("Walk", IE_Pressed, this, &ATDS123Character::ChangeMovementStateToWalk);
+    NewInputComponent->BindAction("Walk", IE_Released, this, &ATDS123Character::ChangeMovementStateToRun);
 
 }
 
@@ -121,7 +127,7 @@ void ATDS123Character::CharacterUpdate()
 void ATDS123Character::ChangeMovementState(EMovementState NewMovementState)
 {
     MovementState = NewMovementState;
-    CharacterUpdate();
+   
 }
 
 void ATDS123Character::ChangeBlockedSprint()
@@ -138,16 +144,16 @@ void ATDS123Character::BlockMovementVector()
     float DotProductResult = FVector::DotProduct(InputCharacterMovement.GetSafeNormal(), ForwardVector.GetSafeNormal());
     float AngleInRadians = FMath::Acos(DotProductResult);
     float AngleInDegrees = FMath::RadiansToDegrees(AngleInRadians);
-    if (AngleInDegrees > 30)
+    if (AngleInDegrees > 30 || Stamina < 0)
     {
         MovementState = EMovementState::Walk_State;
         SprintEnabled = false;
         
 
     }
-    else
+    else if(Stamina > 0 && MovementState == EMovementState::Sprint_State)
     {
-        MovementState = EMovementState::Sprint_State;
+        
         SprintEnabled = true;
         
     }
@@ -156,29 +162,33 @@ void ATDS123Character::BlockMovementVector()
 
 void ATDS123Character::StaminaSystem()
 {
-    
-    float MaxStamina = 1.0f;
-    if (SprintEnabled == false)
+    if (!SprintEnabled && Stamina < MaxStamina)
     {
-        if (Stamina > 0.0f)
-        {
-            SprintEnabled = true;
-            MovementState = EMovementState::Sprint_State;
-            Stamina = FMath::Clamp(Stamina - 0.1, 0, MaxStamina);
-            
+        Stamina = FMath::Clamp(Stamina + 0.001, -0.05, MaxStamina);
+    }
 
-        }
-        else
-        {
-            MovementState = EMovementState::Walk_State;
-            SprintEnabled = false;
-            if (Stamina != MaxStamina)
-            {
-                Stamina = FMath::Clamp(Stamina + 0.3, 0, MaxStamina);
-            }
-        }
+    if (!SprintEnabled) return;
+
+    if (Stamina > 0.0f && SprintEnabled)
+    {
+        Stamina = FMath::Clamp(Stamina - 0.005, -0.05, MaxStamina);
     }
    
+}
+
+void ATDS123Character::ChangeMovementStateToSprint()
+{
+    MovementState = EMovementState::Sprint_State;
+}
+
+void ATDS123Character::ChangeMovementStateToRun()
+{
+    MovementState = EMovementState::Run_State;
+}
+
+void ATDS123Character::ChangeMovementStateToWalk()
+{
+    MovementState = EMovementState::Walk_State;
 }
 
 

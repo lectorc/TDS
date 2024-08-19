@@ -76,6 +76,20 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Motion")
     bool SprintEnabled = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Motion")
+    float MaxStamina = 1.0f;
+
+    UFUNCTION(BlueprintCallable)
+    void ChangeMovementStateToSprint();
+
+    UFUNCTION(BlueprintCallable)
+    void ChangeMovementStateToRun();
+    
+    UFUNCTION(BlueprintCallable)
+    void ChangeMovementStateToWalk();
+
+
 
 };
 
