@@ -137,7 +137,7 @@ void ATDS123Character::CharacterUpdate()
 
 void ATDS123Character::InputAttackPressed()
 {
-   // AttackCharEvent(true);
+   
 }
 
 void ATDS123Character::ChangeMovementState(EMovementState NewMovementState)
@@ -148,7 +148,7 @@ void ATDS123Character::ChangeMovementState(EMovementState NewMovementState)
 
 void ATDS123Character::InputAttackReleased()
 {
-   // AttackCharEvent(false);
+   
 }
 
 void ATDS123Character::ChangeBlockedSprint()
