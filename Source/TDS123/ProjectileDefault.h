@@ -11,7 +11,7 @@
 #include "ProjectileDefault.generated.h"
 
 UCLASS()
-class TPS_API AProjectileDefault : public AActor
+class TDS123_API AProjectileDefault : public AActor
 {
     GENERATED_BODY()
 

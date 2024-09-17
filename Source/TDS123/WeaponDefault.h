@@ -13,7 +13,7 @@
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeaponFireStart);//ToDo Delegate on event weapon fire - Anim char, state char...
 
 UCLASS()
-class TPS_API AWeaponDefault : public AActor
+class TDS123_API AWeaponDefault : public AActor
 {
     GENERATED_BODY()
 

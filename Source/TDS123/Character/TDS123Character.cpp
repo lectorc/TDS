@@ -47,6 +47,14 @@ ATDS123Character::ATDS123Character()
 	PrimaryActorTick.bStartWithTickEnabled = true;
 }
 
+void ATDS123Character::BeginPlay()
+{
+    Super::BeginPlay();
+
+    InitWeapon();
+
+}
+
 void ATDS123Character::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
@@ -59,6 +67,8 @@ void ATDS123Character::Tick(float DeltaSeconds)
 
 }
 
+
+
     void ATDS123Character::SetupPlayerInputComponent(UInputComponent* NewInputComponent)
 {
     Super::SetupPlayerInputComponent(NewInputComponent);
@@ -69,7 +79,8 @@ void ATDS123Character::Tick(float DeltaSeconds)
     NewInputComponent->BindAction("Sprint", IE_Released, this, &ATDS123Character::ChangeMovementStateToRun);
     NewInputComponent->BindAction("Walk", IE_Pressed, this, &ATDS123Character::ChangeMovementStateToWalk);
     NewInputComponent->BindAction("Walk", IE_Released, this, &ATDS123Character::ChangeMovementStateToRun);
-
+    NewInputComponent->BindAction(TEXT("FireEvent"), EInputEvent::IE_Pressed, this, &ATDS123Character::InputAttackPressed);
+    NewInputComponent->BindAction(TEXT("FireEvent"), EInputEvent::IE_Released, this, &ATDS123Character::InputAttackReleased);
 }
 
 void ATDS123Character::InputAxisX(float Value)
@@ -124,10 +135,20 @@ void ATDS123Character::CharacterUpdate()
     GetCharacterMovement()->MaxWalkSpeed = ResSpeed;    
 }
 
+void ATDS123Character::InputAttackPressed()
+{
+   // AttackCharEvent(true);
+}
+
 void ATDS123Character::ChangeMovementState(EMovementState NewMovementState)
 {
     MovementState = NewMovementState;
    
+}
+
+void ATDS123Character::InputAttackReleased()
+{
+   // AttackCharEvent(false);
 }
 
 void ATDS123Character::ChangeBlockedSprint()
@@ -191,5 +212,37 @@ void ATDS123Character::ChangeMovementStateToWalk()
     MovementState = EMovementState::Walk_State;
 }
 
+
+
+void ATDS123Character::InitWeapon()
+{
+    if (InitWeaponClass)
+    {
+        FVector SpawnLocation = FVector(0);
+        FRotator SpawnRotation = FRotator(0);
+
+        FActorSpawnParameters SpawnParams;
+        SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+        SpawnParams.Owner = GetOwner();
+        SpawnParams.Instigator = GetInstigator();
+
+        AWeaponDefault* myWeapon = Cast<AWeaponDefault>(GetWorld()->SpawnActor(InitWeaponClass, &SpawnLocation, &SpawnRotation, SpawnParams));
+        if (myWeapon)
+        {
+            FAttachmentTransformRules Rule(EAttachmentRule::SnapToTarget, false);
+            myWeapon->AttachToComponent(GetMesh(), Rule, FName("WeaponSocketRightHand"));
+            CurrentWeapon = myWeapon;
+
+            myWeapon->UpdateStateWeapon(MovementState);
+        }
+    }
+
+}
+
+
+AWeaponDefault* ATDS123Character::GetCurrentWeapon()
+{
+    return CurrentWeapon;
+}
 
 
