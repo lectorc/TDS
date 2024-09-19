@@ -67,7 +67,7 @@ void ATDS123PlayerController::OnInputStarted()
 
 // Triggered every frame when the input is held down
 void ATDS123PlayerController::OnSetDestinationTriggered()
-{
+{   
 	// We flag that the input is being pressed
 	FollowTime += GetWorld()->GetDeltaSeconds();
 	

@@ -104,6 +104,9 @@ public:
 
     UFUNCTION(BlueprintCallable)
         void ChangeMovementStateToRun();
+
+    UFUNCTION(BlueprintCallable)
+        void AttackCharEvent(bool bIsFiring);
     
     UFUNCTION(BlueprintCallable)
         void ChangeMovementStateToWalk();

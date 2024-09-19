@@ -79,8 +79,8 @@ void ATDS123Character::Tick(float DeltaSeconds)
     NewInputComponent->BindAction("Sprint", IE_Released, this, &ATDS123Character::ChangeMovementStateToRun);
     NewInputComponent->BindAction("Walk", IE_Pressed, this, &ATDS123Character::ChangeMovementStateToWalk);
     NewInputComponent->BindAction("Walk", IE_Released, this, &ATDS123Character::ChangeMovementStateToRun);
-    NewInputComponent->BindAction(TEXT("FireEvent"), EInputEvent::IE_Pressed, this, &ATDS123Character::InputAttackPressed);
-    NewInputComponent->BindAction(TEXT("FireEvent"), EInputEvent::IE_Released, this, &ATDS123Character::InputAttackReleased);
+    NewInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &ATDS123Character::InputAttackPressed);
+    NewInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Released, this, &ATDS123Character::InputAttackReleased);
 }
 
 void ATDS123Character::InputAxisX(float Value)
@@ -137,7 +137,7 @@ void ATDS123Character::CharacterUpdate()
 
 void ATDS123Character::InputAttackPressed()
 {
-   
+    AttackCharEvent(true);
 }
 
 void ATDS123Character::ChangeMovementState(EMovementState NewMovementState)
@@ -148,7 +148,7 @@ void ATDS123Character::ChangeMovementState(EMovementState NewMovementState)
 
 void ATDS123Character::InputAttackReleased()
 {
-   
+    AttackCharEvent(false);
 }
 
 void ATDS123Character::ChangeBlockedSprint()
@@ -237,6 +237,19 @@ void ATDS123Character::InitWeapon()
         }
     }
 
+}
+
+void ATDS123Character::AttackCharEvent(bool bIsFiring)
+{
+    AWeaponDefault* myWeapon = nullptr;
+    myWeapon = GetCurrentWeapon();
+    if (myWeapon)
+    {
+        //ToDo Check melee or range
+        myWeapon->SetWeaponStateFire(bIsFiring);
+    }
+    else
+        UE_LOG(LogTemp, Warning, TEXT("ATPSCharacter::AttackCharEvent - CurrentWeapon -NULL"));
 }
 
 
