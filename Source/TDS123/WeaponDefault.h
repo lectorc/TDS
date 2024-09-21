@@ -30,8 +30,10 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)
     class UArrowComponent* ShootLocation = nullptr;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FireLogic")
+    UPROPERTY()
     FWeaponInfo WeaponSetting;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Info")
+    FAddicionalWeaponInfo WeaponInfo;
 
 protected:
     // Called when the game starts or when spawned
@@ -59,6 +61,10 @@ public:
 
     void UpdateStateWeapon(EMovementState NewMovementState);
     void ChangeDispersion();
+
+
+    UFUNCTION()
+    void BulletLog();
 
     //Timers'flags
     float FireTime = 0.0;

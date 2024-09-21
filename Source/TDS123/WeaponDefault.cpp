@@ -81,7 +81,7 @@ FProjectileInfo AWeaponDefault::GetProjectile()
     return WeaponSetting.ProjectileSetting;
 }
 
-void AWeaponDefault::Fire()
+inline void AWeaponDefault::Fire()
 {
     FireTime = WeaponSetting.RateOfFire;
 
@@ -91,6 +91,8 @@ void AWeaponDefault::Fire()
         FRotator SpawnRotation = ShootLocation->GetComponentRotation();
         FProjectileInfo ProjectileInfo;
         ProjectileInfo = GetProjectile();
+        UE_LOG(LogTemp, Warning, TEXT("Spawn Location: %f %f %f | Spawn Rotation %f %f %f"), SpawnLocation.X, SpawnLocation.Y, SpawnLocation.Z,
+            SpawnRotation.Pitch, SpawnRotation.Roll, SpawnRotation.Yaw);
 
         if (ProjectileInfo.Projectile)
         {
@@ -124,5 +126,10 @@ void AWeaponDefault::UpdateStateWeapon(EMovementState NewMovementState)
 
 void AWeaponDefault::ChangeDispersion()
 {
+}
+
+void AWeaponDefault::BulletLog()
+{
+
 }
 
