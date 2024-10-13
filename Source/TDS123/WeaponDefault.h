@@ -40,15 +40,19 @@ protected:
     virtual void BeginPlay() override;
 
 public:
-    // Tick func
+    // Tick func        
     virtual void Tick(float DeltaTime) override;
 
     void FireTick(float DeltaTime);
+
+    void ReloadTick(float DeltaTime);
 
     void WeaponInit();
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FireLogic")
     bool WeaponFiring = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FireLogic")
+    bool WeaponReloading = false;
 
     UFUNCTION(BlueprintCallable)
     void SetWeaponStateFire(bool bIsFire);
@@ -61,11 +65,52 @@ public:
 
     void UpdateStateWeapon(EMovementState NewMovementState);
     void ChangeDispersion();
+    void DispersionTick(float DeltaTime);
+    void ChangeDispersionByShot();
 
+    
+    FVector GetFireEndLocation()const;
+    FVector ApplyDispersionToShoot(FVector DirectionShoot)const;
 
     UFUNCTION()
     void BulletLog();
 
     //Timers'flags
-    float FireTime = 0.0;
+    float FireTimer = 0.0f;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ReloadLogic")
+    float ReloadTimer = 0.0f;
+    //debug
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ReloadLogic Debug")
+    float ReloadTime = 0.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Debug")
+    bool ShowDebug = false;
+
+      UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Debug")
+    bool byBarrel = false;
+    
+    float GetCurrentDispersion() const;
+
+    UFUNCTION(BlueprintCallable)
+    int32 GetWeaponRound();
+    void InitReload();
+    void FinishReload();
+   
+   
+
+    bool BlockFire = false;
+
+    //dispersion
+    bool ShouldReduceDispersion = false;
+    float CurrentDispersion = 0.0f;
+    float CurrentDispersionMax = 1.0f;
+    float CurrentDispersionMin = 0.1f;
+    float CurrentDispersionRecoil = 0.1f;
+    float CurrentDispersionReduction = 0.1f;
+
+    FVector ShootEndLocation = FVector(0);
+
+  
+    
 };

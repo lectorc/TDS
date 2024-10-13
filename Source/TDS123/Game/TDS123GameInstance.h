@@ -20,7 +20,8 @@ class TDS123_API UTDS123GameInstance : public UGameInstance
 
 public:
     //table
-    //UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = " WeaponSetting ")
-    //UFUNCTION(BlueprintCallable)
-    //bool GetWeaponInfoByName(FName NameWeapon, FWeaponInfo& OutInfo);
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = " WeaponSetting ")
+    UDataTable* WeaponInfoTable = nullptr;
+    UFUNCTION(BlueprintCallable)
+    bool GetWeaponInfoByName(FName NameWeapon, FWeaponInfo& OutInfo);
 };

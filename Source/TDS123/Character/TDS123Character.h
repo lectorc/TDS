@@ -51,7 +51,7 @@ public:
         AWeaponDefault* CurrentWeapon = nullptr;
  //Demo
         UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Demo")
-        TSubclassOf<AWeaponDefault> InitWeaponClass = nullptr;
+        FName InitWeaponName;
 
  //Inputs
     UFUNCTION()
@@ -77,8 +77,8 @@ public:
     UFUNCTION(BlueprintCallable)
         void CharacterUpdate();
 
-    UFUNCTION(BlueprintCallable)
-        void ChangeMovementState(EMovementState NewMovementState);
+       UFUNCTION(BlueprintCallable)
+       void ChangeMovementState();
         
     UFUNCTION(BlueprintCallable)
         void ChangeBlockedSprint();
@@ -89,6 +89,8 @@ public:
 
     UFUNCTION(BlueprintCallable)
         void StaminaSystem();
+
+
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Motion")
         float Stamina = 1.0f;
@@ -98,6 +100,13 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Motion")
         float MaxStamina = 1.0f;
+
+        UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+        bool SprintRunEnabled = false;
+        UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+        bool WalkEnabled = false;
+        UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+        bool AimEnabled = false;
 
     UFUNCTION(BlueprintCallable)
         void ChangeMovementStateToSprint();
@@ -115,7 +124,10 @@ public:
         AWeaponDefault* GetCurrentWeapon();
 
     UFUNCTION(BlueprintCallable)
-     void InitWeapon();
+     void InitWeapon(FName IdWeapon);
+
+    UFUNCTION(BlueprintCallable)
+    void TryReloadWeapon();
 
 
 
