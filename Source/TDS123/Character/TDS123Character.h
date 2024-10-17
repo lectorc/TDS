@@ -120,6 +120,9 @@ public:
     UFUNCTION(BlueprintCallable)
         void ChangeMovementStateToWalk();
 
+        UFUNCTION(BlueprintCallable)
+        void ChangeMovementStateToAim();
+
     UFUNCTION(BlueprintCallable)
         AWeaponDefault* GetCurrentWeapon();
 

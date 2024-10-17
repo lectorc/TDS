@@ -86,10 +86,9 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Debug")
     bool ShowDebug = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Debug")
+    float SizeVectorToChangeShotDirectionLogic = 100.0f;
 
-      UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Debug")
-    bool byBarrel = false;
-    
     float GetCurrentDispersion() const;
 
     UFUNCTION(BlueprintCallable)

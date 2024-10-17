@@ -107,6 +107,8 @@ void AWeaponDefault::SetWeaponStateFire(bool bIsFire)
     FireTimer = 0.01f;
 }
 
+
+
 bool AWeaponDefault::CheckWeaponCanFire()
 {
     return !BlockFire;
@@ -245,20 +247,27 @@ void AWeaponDefault::DispersionTick(float DeltaTime)
         UE_LOG(LogTemp, Warning, TEXT("Dispersion: MAX = %f. MIN = %f. Current = %f"), CurrentDispersionMax, CurrentDispersionMin, CurrentDispersion);
 }
 
+void AWeaponDefault::ChangeDispersionByShot()
+{
+    CurrentDispersion = CurrentDispersion + CurrentDispersionRecoil;
+}
+
 FVector AWeaponDefault::GetFireEndLocation() const
 {
     bool bShootDirection = false;
     FVector EndLocation = FVector(0.f); 
     FVector tmpV = (ShootLocation->GetComponentLocation() - ShootEndLocation);
-    if (byBarrel)
+    if (tmpV.Size() > SizeVectorToChangeShotDirectionLogic)
     {
         EndLocation = ShootLocation->GetComponentLocation() + ApplyDispersionToShoot((ShootLocation->GetComponentLocation() - ShootEndLocation).GetSafeNormal()) * -20000.0f;
+        if(ShowDebug)
         DrawDebugCone(GetWorld(), ShootLocation->GetComponentLocation(), -(ShootLocation->GetComponentLocation() - ShootEndLocation), WeaponSetting.DistacneTrace, GetCurrentDispersion() * PI / 180.f, GetCurrentDispersion() * PI / 180.f, 32, FColor::Emerald, false, .1f, (uint8)'\000', 1.0f);
 
     }
     else
     { 
         EndLocation = ShootLocation->GetComponentLocation() + ApplyDispersionToShoot(ShootLocation->GetForwardVector()) * 20000.0f;
+        if (ShowDebug)
         DrawDebugCone(GetWorld(), ShootLocation->GetComponentLocation(), ShootLocation->GetForwardVector(), WeaponSetting.DistacneTrace, GetCurrentDispersion() * PI / 180.f, GetCurrentDispersion() * PI / 180.f, 32, FColor::Emerald, false, .1f, (uint8)'\000', 1.0f);
     }
     

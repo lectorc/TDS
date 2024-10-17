@@ -78,8 +78,10 @@ void ATDS123Character::Tick(float DeltaSeconds)
     NewInputComponent->BindAxis(TEXT("MoveRight"), this, &ATDS123Character::InputAxisY);
     NewInputComponent->BindAction("Sprint", IE_Pressed, this, &ATDS123Character::ChangeMovementStateToSprint);
     NewInputComponent->BindAction("Sprint", IE_Released, this, &ATDS123Character::ChangeMovementStateToRun);
-    NewInputComponent->BindAction("Walk", IE_Pressed, this, &ATDS123Character::ChangeMovementStateToWalk);
-    NewInputComponent->BindAction("Walk", IE_Released, this, &ATDS123Character::ChangeMovementStateToRun);
+    //NewInputComponent->BindAction("Walk", IE_Pressed, this, &ATDS123Character::ChangeMovementStateToWalk);
+   // NewInputComponent->BindAction("Walk", IE_Released, this, &ATDS123Character::ChangeMovementStateToRun);
+    NewInputComponent->BindAction("Aim", IE_Pressed, this, &ATDS123Character::ChangeMovementStateToAim);
+    NewInputComponent->BindAction("Aim", IE_Released, this, &ATDS123Character::ChangeMovementStateToWalk);
     NewInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &ATDS123Character::InputAttackPressed);
     NewInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Released, this, &ATDS123Character::InputAttackReleased);
     NewInputComponent->BindAction(TEXT("ReloadEvent"), EInputEvent::IE_Released, this, &ATDS123Character::TryReloadWeapon);
@@ -116,12 +118,15 @@ void ATDS123Character::MovementTick(float DeltaTime)
             {
             case EMovementState::Aim_State:
                 Displacement = FVector(0.0f, 0.0f, 160.0f);
+                CurrentWeapon->ShouldReduceDispersion = true;
                 break;
             case EMovementState::Walk_State:
                 Displacement = FVector(0.0f, 0.0f, 120.0f);
+                CurrentWeapon->ShouldReduceDispersion = false;
                 break;
             case EMovementState::Run_State:
                 Displacement = FVector(0.0f, 0.0f, 120.0f);
+                CurrentWeapon->ShouldReduceDispersion = false;
                 break;
             case EMovementState::Sprint_State:
                 Displacement = FVector(0.0f, 0.0f, 120.0f);
@@ -191,7 +196,7 @@ void ATDS123Character::BlockMovementVector()
     float DotProductResult = FVector::DotProduct(InputCharacterMovement.GetSafeNormal(), ForwardVector.GetSafeNormal());
     float AngleInRadians = FMath::Acos(DotProductResult);
     float AngleInDegrees = FMath::RadiansToDegrees(AngleInRadians);
-    if (AngleInDegrees > 30 || Stamina < 0)
+    if (AngleInDegrees > 30 || Stamina < 0 && MovementState == EMovementState::Sprint_State)
     {
         MovementState = EMovementState::Walk_State;
         SprintEnabled = false;
@@ -230,12 +235,22 @@ void ATDS123Character::ChangeMovementStateToSprint()
 
 void ATDS123Character::ChangeMovementStateToRun()
 {
+    
     MovementState = EMovementState::Run_State;
+
 }
 
 void ATDS123Character::ChangeMovementStateToWalk()
 {
     MovementState = EMovementState::Walk_State;
+    AimEnabled = false;
+    
+}
+
+void ATDS123Character::ChangeMovementStateToAim()
+{
+    MovementState = EMovementState::Aim_State;
+    AimEnabled = true;
 }
 
 void ATDS123Character::ChangeMovementState()
