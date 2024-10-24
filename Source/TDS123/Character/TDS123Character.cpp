@@ -81,7 +81,7 @@ void ATDS123Character::Tick(float DeltaSeconds)
     //NewInputComponent->BindAction("Walk", IE_Pressed, this, &ATDS123Character::ChangeMovementStateToWalk);
    // NewInputComponent->BindAction("Walk", IE_Released, this, &ATDS123Character::ChangeMovementStateToRun);
     NewInputComponent->BindAction("Aim", IE_Pressed, this, &ATDS123Character::ChangeMovementStateToAim);
-    NewInputComponent->BindAction("Aim", IE_Released, this, &ATDS123Character::ChangeMovementStateToWalk);
+    NewInputComponent->BindAction("Aim", IE_Released, this, &ATDS123Character::ChangeMovementStateToRun);
     NewInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &ATDS123Character::InputAttackPressed);
     NewInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Released, this, &ATDS123Character::InputAttackReleased);
     NewInputComponent->BindAction(TEXT("ReloadEvent"), EInputEvent::IE_Released, this, &ATDS123Character::TryReloadWeapon);
@@ -189,27 +189,25 @@ void ATDS123Character::ChangeBlockedSprint()
 
 void ATDS123Character::BlockMovementVector()
 {
-    FVector InputCharacterMovement;
-    FVector ForwardVector;
-    ForwardVector = GetActorForwardVector();
-    InputCharacterMovement = GetCharacterMovement()->GetLastInputVector();
-    float DotProductResult = FVector::DotProduct(InputCharacterMovement.GetSafeNormal(), ForwardVector.GetSafeNormal());
-    float AngleInRadians = FMath::Acos(DotProductResult);
-    float AngleInDegrees = FMath::RadiansToDegrees(AngleInRadians);
-    if (AngleInDegrees > 30 || Stamina < 0 && MovementState == EMovementState::Sprint_State)
+    if (SprintEnabled == true)
     {
-        MovementState = EMovementState::Walk_State;
-        SprintEnabled = false;
-        
+        FVector InputCharacterMovement;
+        FVector ForwardVector;
+        ForwardVector = GetActorForwardVector();
+        InputCharacterMovement = GetCharacterMovement()->GetLastInputVector();
+        float DotProductResult = FVector::DotProduct(InputCharacterMovement.GetSafeNormal(), ForwardVector.GetSafeNormal());
+        float AngleInRadians = FMath::Acos(DotProductResult);
+        float AngleInDegrees = FMath::RadiansToDegrees(AngleInRadians);
+        if (AngleInDegrees > 30 || Stamina < 0 )
+        {
+            MovementState = EMovementState::Run_State;
+            SprintEnabled = false;
 
-    }
-    else if(Stamina > 0 && MovementState == EMovementState::Sprint_State)
-    {
+
+        }
         
-        SprintEnabled = true;
-        
+        CharacterUpdate();
     }
-    CharacterUpdate();
 }
 
 void ATDS123Character::StaminaSystem()
@@ -231,12 +229,14 @@ void ATDS123Character::StaminaSystem()
 void ATDS123Character::ChangeMovementStateToSprint()
 {
     MovementState = EMovementState::Sprint_State;
+    SprintEnabled = true;
 }
 
 void ATDS123Character::ChangeMovementStateToRun()
 {
     
     MovementState = EMovementState::Run_State;
+    AimEnabled = false;
 
 }
 
@@ -246,6 +246,27 @@ void ATDS123Character::ChangeMovementStateToWalk()
     AimEnabled = false;
     
 }
+
+void ATDS123Character::WeaponReloadStart(UAnimMontage* Anim)
+{
+    WeaponReloadStart_BP(Anim);
+}
+
+void ATDS123Character::WeaponReloadEnd()
+{
+    WeaponReloadEnd_BP();
+}
+
+void ATDS123Character::WeaponReloadStart_BP_Implementation(UAnimMontage* Anim)
+{
+    //in BP
+}
+
+void ATDS123Character::WeaponReloadEnd_BP_Implementation()
+{
+    //in BP
+}
+
 
 void ATDS123Character::ChangeMovementStateToAim()
 {
@@ -326,6 +347,9 @@ void ATDS123Character::InitWeapon(FName IdWeapon)
                     myWeapon->UpdateStateWeapon(MovementState);
                     myWeapon->WeaponInfo.Round = myWeaponInfo.MaxRound;
                     myWeapon->ReloadTime = myWeaponInfo.ReloadTime;
+
+                    myWeapon->OnWeaponReloadStart.AddDynamic(this, &ATDS123Character::WeaponReloadStart);
+                    myWeapon->OnWeaponReloadEnd.AddDynamic(this, &ATDS123Character::WeaponReloadEnd);
                 }
             }
         }

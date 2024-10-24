@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "WeaponDefault.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AWeaponDefault::AWeaponDefault()
@@ -125,47 +126,55 @@ inline void AWeaponDefault::Fire()
     WeaponInfo.Round = WeaponInfo.Round - 1;
     ChangeDispersionByShot();
 
+    UGameplayStatics::SpawnSoundAtLocation(GetWorld(), WeaponSetting.SoundFireWeapon, ShootLocation-> GetComponentLocation());
+    UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponSetting.EffectFireWeapon, ShootLocation-> GetComponentTransform());
+
+    int8 NumberProjectile = GetNumberProjectileByShot();
+
     if (ShootLocation)
     {
         FVector SpawnLocation = ShootLocation->GetComponentLocation();
         FRotator SpawnRotation = ShootLocation->GetComponentRotation();
         FProjectileInfo ProjectileInfo;
         ProjectileInfo = GetProjectile();
-        UE_LOG(LogTemp, Warning, TEXT("Spawn Location: %f %f %f | Spawn Rotation %f %f %f"), SpawnLocation.X, SpawnLocation.Y, SpawnLocation.Z,
-            SpawnRotation.Pitch, SpawnRotation.Roll, SpawnRotation.Yaw);
 
-        FVector Dir = GetFireEndLocation() - SpawnLocation;
-        
-        Dir.Normalize();
-
-        FMatrix MyMatrix(Dir, FVector(0, 1, 0), FVector(0, 0, 1), FVector::ZeroVector);
-        SpawnRotation = MyMatrix.Rotator();
-
-
-
-
-        if (ProjectileInfo.Projectile)
+        FVector EndLocation;
+        for (int8 i = 0; i < NumberProjectile; i++)//Shotgun
         {
-            //Projectile Init ballistic fire
+            EndLocation = GetFireEndLocation();
+            FVector Dir = EndLocation - SpawnLocation;
+            Dir.Normalize();
+            FMatrix MyMatrix(Dir, FVector(0, 1, 0), FVector(0, 0, 1), FVector::ZeroVector);
+            SpawnRotation = MyMatrix.Rotator();
 
-            FActorSpawnParameters SpawnParams;
-            SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-            SpawnParams.Owner = GetOwner();
-            SpawnParams.Instigator = GetInstigator();
 
-            AProjectileDefault* myProjectile = Cast<AProjectileDefault>(GetWorld()->SpawnActor(ProjectileInfo.Projectile, &SpawnLocation, &SpawnRotation, SpawnParams));
-            if (myProjectile)
+
+
+            if (ProjectileInfo.Projectile)
             {
-                //ToDo Init Projectile settings by id in table row(or keep in weapon table)
-                myProjectile->InitialLifeSpan = 20.0f;
-                //Projectile->BulletProjectileMovement->InitialSpeed = 2500.0f;
+                //Projectile Init ballistic fire
+
+                FActorSpawnParameters SpawnParams;
+                SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+                SpawnParams.Owner = GetOwner();
+                SpawnParams.Instigator = GetInstigator();
+
+                AProjectileDefault* myProjectile = Cast<AProjectileDefault>(GetWorld()->SpawnActor(ProjectileInfo.Projectile, &SpawnLocation, &SpawnRotation, SpawnParams));
+                if (myProjectile)
+                {
+                    //ToDo Init Projectile settings by id in table row(or keep in weapon table)
+                    myProjectile->InitialLifeSpan = 20.0f;
+                    //Projectile->BulletProjectileMovement->InitialSpeed = 2500.0f;
+                }
+            }
+            else
+            {
+                //ToDo Projectile null Init trace fire			
             }
         }
-        else
-        {
-            //ToDo Projectile null Init trace fire			
         }
-    }
+
+       
 }
 
 void AWeaponDefault::UpdateStateWeapon(EMovementState NewMovementState)
@@ -286,6 +295,11 @@ FVector AWeaponDefault::GetFireEndLocation() const
     return EndLocation;
 }
 
+int8 AWeaponDefault::GetNumberProjectileByShot() const
+{
+    return WeaponSetting.NumberProjectileByShot;
+}
+
 FVector AWeaponDefault::ApplyDispersionToShoot(FVector DirectionShoot) const
 {
     
@@ -313,11 +327,15 @@ void AWeaponDefault::InitReload()
     WeaponReloading = true;
 
     ReloadTimer = WeaponSetting.ReloadTime;
+    if(WeaponSetting.AnimCharReload)
+    OnWeaponReloadStart.Broadcast(WeaponSetting.AnimCharReload);
 }
 
 void AWeaponDefault::FinishReload()
 {
     WeaponReloading = false;
     WeaponInfo.Round = WeaponSetting.MaxRound;  
+
+    OnWeaponReloadStart.Broadcast();
 }
 

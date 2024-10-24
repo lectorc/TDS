@@ -28,7 +28,7 @@ struct FCharacterSpeed
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
     float WalkSpeed = 200.0f;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
-    float RunSpeed = 500.0f;
+    float RunSpeed = 350.0f;
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
     float SprintSpeed = 750.0f;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
