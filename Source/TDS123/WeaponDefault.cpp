@@ -163,7 +163,7 @@ inline void AWeaponDefault::Fire()
                 if (myProjectile)
                 {
                     //ToDo Init Projectile settings by id in table row(or keep in weapon table)
-                    myProjectile->InitialLifeSpan = 20.0f;
+                    myProjectile->InitProjectile(WeaponSetting.ProjectileSetting);
                     //Projectile->BulletProjectileMovement->InitialSpeed = 2500.0f;
                 }
             }
@@ -336,6 +336,6 @@ void AWeaponDefault::FinishReload()
     WeaponReloading = false;
     WeaponInfo.Round = WeaponSetting.MaxRound;  
 
-    OnWeaponReloadStart.Broadcast();
+    OnWeaponReloadEnd.Broadcast();
 }
 

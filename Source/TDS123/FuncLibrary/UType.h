@@ -70,6 +70,7 @@ struct FProjectileInfo
     float ProjectileMaxRadiusDamage = 200.0f;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileSetting")
     float ExploseMaxDamage = 40.0f;
+
     //Timer add
 };
 

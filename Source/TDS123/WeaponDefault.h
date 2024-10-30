@@ -11,7 +11,7 @@
 #include "ProjectileDefault.h"
 #include "WeaponDefault.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeaponReloadStart,UAnimMontage*, Anim);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponReloadStart,UAnimMontage*, Anim);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeaponReloadEnd);
 UCLASS()
 class TDS123_API AWeaponDefault : public AActor
