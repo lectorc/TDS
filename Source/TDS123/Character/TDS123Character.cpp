@@ -348,7 +348,9 @@ void ATDS123Character::InitWeapon(FName IdWeapon)
                     myWeapon->WeaponInfo.Round = myWeaponInfo.MaxRound;
                     myWeapon->ReloadTime = myWeaponInfo.ReloadTime;
 
+                    if(!myWeapon->OnWeaponReloadStart.IsAlreadyBound(this, &ATDS123Character::WeaponReloadStart))
                     myWeapon->OnWeaponReloadStart.AddDynamic(this, &ATDS123Character::WeaponReloadStart);
+                    if (!myWeapon->OnWeaponReloadEnd.IsAlreadyBound(this, &ATDS123Character::WeaponReloadEnd))
                     myWeapon->OnWeaponReloadEnd.AddDynamic(this, &ATDS123Character::WeaponReloadEnd);
                 }
             }

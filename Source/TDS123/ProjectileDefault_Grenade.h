@@ -16,20 +16,20 @@ class TDS123_API AProjectileDefault_Grenade : public AProjectileDefault
 	
 protected:
 
-    //virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
 public:
-   // virtual void Tick(float DeltaTime) override;
+    virtual void Tick(float DeltaTime) override;
 
-    ///void TimerExplose(float DeltaTime);
+    void TimerExplose(float DeltaTime);
 
-    //virtual void BulletCollisionSphereHit(class UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
+    virtual void BulletCollisionSphereHit(class UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
 
-   // virtual void ImpactProjectile() override;
+     virtual void ImpactProjectile() override;
 
-   // void Explose();
+   void Explose();
 
-   // bool TimerEnabled = false;
-   // float TimerToExplose = 0.0f;
-    // float TimeToExplose = 5.0f;
+    bool TimerEnabled = false;
+    float TimerToExplose = 0.0f;
+    float TimeToExplose = 5.0f;
 };
