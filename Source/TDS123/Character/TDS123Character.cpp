@@ -247,11 +247,6 @@ void ATDS123Character::ChangeMovementStateToWalk()
     
 }
 
-void ATDS123Character::WeaponReloadStart(UAnimMontage* Anim)
-{
-    WeaponReloadStart_BP(Anim);
-}
-
 void ATDS123Character::WeaponReloadEnd()
 {
     WeaponReloadEnd_BP();
@@ -387,6 +382,12 @@ void ATDS123Character::TryReloadWeapon()
         }
     }
 }
+
+void ATDS123Character::WeaponReloadStart(UAnimMontage* Anim)
+{
+        WeaponReloadStart_BP(Anim);
+}
+
 
 
 
