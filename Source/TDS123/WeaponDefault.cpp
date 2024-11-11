@@ -122,6 +122,18 @@ FProjectileInfo AWeaponDefault::GetProjectile()
 
 inline void AWeaponDefault::Fire()
 {
+    if (WeaponSetting.ShellBullets.DropMesh)
+    {
+        if (WeaponSetting.ShellBullets.DropMeshTime < 0.0f)
+        {
+            InitDropMesh
+        }
+    }
+
+
+
+
+
     FireTimer = WeaponSetting.RateOfFire;
     WeaponInfo.Round = WeaponInfo.Round - 1;
     ChangeDispersionByShot();
@@ -337,5 +349,35 @@ void AWeaponDefault::FinishReload()
     WeaponInfo.Round = WeaponSetting.MaxRound;  
 
     OnWeaponReloadEnd.Broadcast();
+}
+
+void AWeaponDefault::InitDropMesh(UStaticMesh* DropMesh, FTransform Offset, FVector DropImpulseDirection, float LifeTimeMesh, float ImpulseRandomDispersion, float PowerImpulse, float CustomMass)
+{
+    if (DropMesh)
+    {
+        FTransform Transform;
+
+        FVector LocalDir = this->GetActorForwardVector() * Offset.GetLocation().X + this->GetActorRightVector() * Offset.GetLocation().Y + this->GetActorUpVector() * Offset.GetLocation().Z;
+
+        Transform.SetLocation(GetActorLocation() + LocalDir);
+        Transform.SetScale3D(Offset.GetScale3D());
+
+        Transform.SetRotation((GetActorRotation() + Offset.Rotator()).Quaternion());
+        AStaticMeshActor* NewActor = nullptr;
+
+        FActorSpawnParameters Param;
+        Param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+        Param.Owner = this;
+        NewActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), Transform, Param);
+
+        if (NewActor && NewActor->GetStaticMeshComponent())
+        {
+            NewActor->GetStaticMeshComponent()->SetCollisionProfileName(TEXT("IgnoreOnlyPawn"));
+            NewActor->GetStaticMeshComponent()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+
+            NewActor->SetActorTickEnabled(false)
+            NewActor->InitialLifeSpan
+        }
+    }
 }
 

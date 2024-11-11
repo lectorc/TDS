@@ -114,7 +114,17 @@ public:
     float CurrentDispersionRecoil = 0.1f;
     float CurrentDispersionReduction = 0.1f;
 
+    float DropClipFlag = false;
+    float DropClipTimer = -1.0f;
+
+    bool DropShellFlag = false;
+    float DropShellTimer = -1.0f;
+
+    UFUNCTION()
+    void InitDropMesh(UStaticMesh* DropMesh, FTransform Offset, FVector DropImpulseDirection, float LifeTimeMesh, float ImpulseRandomDispersion, float PowerImpulse, float CustomMass);
+    
     FVector ShootEndLocation = FVector(0);
+
 
   
     
