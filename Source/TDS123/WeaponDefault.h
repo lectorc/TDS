@@ -9,7 +9,9 @@
 
 #include "FuncLibrary/UType.h"
 #include "ProjectileDefault.h"
+#include "Engine/StaticMeshActor.h"
 #include "WeaponDefault.generated.h"
+
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponReloadStart,UAnimMontage*, Anim);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeaponReloadEnd);
@@ -52,12 +54,17 @@ public:
 
     void ReloadTick(float DeltaTime);
 
+    void ShellDropTick(float DeltaTime);
+
+    void ClipDropTick(float DeltaTime);
+
     void WeaponInit();
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FireLogic")
     bool WeaponFiring = false;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FireLogic")
     bool WeaponReloading = false;
+    bool WeaponAiming = false;
 
     UFUNCTION(BlueprintCallable)
     void SetWeaponStateFire(bool bIsFire);

@@ -64,6 +64,21 @@ void AProjectileDefault::InitProjectile(FProjectileInfo InitParam)
     BulletProjectileMovement->InitialSpeed = InitParam.ProjectileInitSpeed;
     BulletProjectileMovement->MaxSpeed = InitParam.ProjectileInitSpeed;
     this->SetLifeSpan(InitParam.ProjectileLifeTime);
+    if (InitParam.ProjectileStaticMesh)
+    {
+        BulletMesh->SetStaticMesh(InitParam.ProjectileStaticMesh);
+        BulletMesh->SetRelativeTransform(InitParam.ProjectileStaticMeshOffset);
+    }
+    else
+        BulletMesh->DestroyComponent();
+
+    if (InitParam.ProjectileTrailFX)
+    {
+        BulletFX->SetTemplate(InitParam.ProjectileTrailFX);
+        BulletFX->SetRelativeTransform(InitParam.ProjectileTrailFXOffset);
+    }
+    else
+        BulletFX->DestroyComponent();
 
     ProjectileSetting = InitParam;
 }
