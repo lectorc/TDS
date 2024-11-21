@@ -403,6 +403,8 @@ int32 AWeaponDefault::GetWeaponRound()
 
 void AWeaponDefault::InitReload()
 {
+    if (WeaponReloading == false)
+    { 
     WeaponReloading = true;
 
     ReloadTimer = WeaponSetting.ReloadTime;
@@ -428,7 +430,7 @@ void AWeaponDefault::InitReload()
         DropClipFlag = true;
         DropClipTimer = WeaponSetting.ClipDropMesh.DropMeshTime;
     }
-        
+    }
 }
 
 void AWeaponDefault::FinishReload()
