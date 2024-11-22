@@ -31,5 +31,5 @@ public:
 
     bool TimerEnabled = false;
     float TimerToExplose = 0.0f;
-    float TimeToExplose = 10.0f;
+    float TimeToExplose = 4.0f;
 };
