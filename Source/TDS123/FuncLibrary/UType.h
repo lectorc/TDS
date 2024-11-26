@@ -228,7 +228,7 @@ struct FWeaponInfo : public FTableRowBase
 };
 
 USTRUCT(BlueprintType)
-struct FAddicionalWeaponInfo
+struct FAdditionalWeaponInfo
 {
     GENERATED_BODY()
 

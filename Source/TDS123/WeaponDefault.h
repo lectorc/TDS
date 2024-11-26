@@ -39,8 +39,9 @@ public:
 
     UPROPERTY()
     FWeaponInfo WeaponSetting;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Info")
-    FAddicionalWeaponInfo WeaponInfo;
+    FAdditionalWeaponInfo AdditionalWeaponInfo;
 
 protected:
     // Called when the game starts or when spawned

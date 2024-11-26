@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "TDS123/FuncLibrary/UType.h"
 #include "TDS123/WeaponDefault.h"
+#include "TDS123/Character/TDS123InventoryComponent.h"
 #include "TDS123Character.generated.h"
 
 UCLASS(Blueprintable)
@@ -29,6 +30,9 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
     
     bool IsSprintForward = false;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+    class UTDS123InventoryComponent* InventoryComponent;
     
 
 private:
@@ -127,7 +131,7 @@ public:
         AWeaponDefault* GetCurrentWeapon();
 
     UFUNCTION(BlueprintCallable)
-     void InitWeapon(FName IdWeapon);
+     void InitWeapon(FName IdWeapon, FAdditionalWeaponInfo WeaponAdditionalInfo);
 
     UFUNCTION(BlueprintCallable)
     void TryReloadWeapon();
@@ -145,6 +149,12 @@ public:
     UFUNCTION(BlueprintNativeEvent)
     void WeaponReloadStart_BP(UAnimMontage* Anim);
 
+
+    void TrySwicthNextWeapon();
+    void TrySwitchPreviosWeapon();
+
+    UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+    int32 CurrentIndexWeapon = 0;
 
 
 };

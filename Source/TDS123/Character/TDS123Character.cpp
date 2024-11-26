@@ -12,6 +12,7 @@
 #include "Materials/Material.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "TDS123/Character/TDS123InventoryComponent.h"
 #include "Engine/World.h"
 
 ATDS123Character::ATDS123Character()
@@ -42,6 +43,13 @@ ATDS123Character::ATDS123Character()
 	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
 	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+    InventoryComponent = CreateDefaultSubobject<UTDS123InventoryComponent>(TEXT("InventoryComponent"));
+
+    if (InventoryComponent)
+    {
+        InventoryComponent->OnSwitchWeapon.AddDynamic(this, &ATDS123Character::InitWeapon);
+    }
 
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
@@ -85,6 +93,9 @@ void ATDS123Character::Tick(float DeltaSeconds)
     NewInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &ATDS123Character::InputAttackPressed);
     NewInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Released, this, &ATDS123Character::InputAttackReleased);
     NewInputComponent->BindAction(TEXT("ReloadEvent"), EInputEvent::IE_Released, this, &ATDS123Character::TryReloadWeapon);
+    NewInputComponent->BindAction(TEXT("SwitchNextWeapon"), EInputEvent::IE_Pressed, this, &ATDS123Character::TrySwitchNextWeapon)
+    NewInputComponent->BindAction(TEXT("SwitchPreviosWeapon"), EInputEvent::IE_Pressed, this, &ATDS123Character::TrySwitchPreviosWeapon);
+
 }
 
 void ATDS123Character::InputAxisX(float Value)
@@ -252,6 +263,53 @@ void ATDS123Character::WeaponReloadEnd()
     WeaponReloadEnd_BP();
 }
 
+void ATDS123Character::TrySwicthNextWeapon()
+{
+    if (InventoryComponent->WeaponSlots.Num() > 1)
+    {
+        //We have more then one weapon go switch
+        int8 OldIndex = CurrentIndexWeapon;
+        FAdditionalWeaponInfo OldInfo;
+        if (CurrentWeapon)
+        {
+            OldInfo = CurrentWeapon->AdditionalWeaponInfo;
+            if (CurrentWeapon->WeaponReloading)
+                CurrentWeapon->CancelReload();
+        }
+
+        if (InventoryComponent)
+        {
+            if (InventoryComponent->SwitchWeaponToIndex(CurrentIndexWeapon + 1, OldIndex, OldInfo, true))
+            {
+            }
+        }
+    }
+}
+
+void ATDS123Character::TrySwitchPreviosWeapon()
+{
+    if (InventoryComponent->WeaponSlots.Num() > 1)
+    {
+        //We have more then one weapon go switch
+        int8 OldIndex = CurrentIndexWeapon;
+        FAdditionalWeaponInfo OldInfo;
+        if (CurrentWeapon)
+        {
+            OldInfo = CurrentWeapon->AdditionalWeaponInfo;
+            if (CurrentWeapon->WeaponReloading)
+                CurrentWeapon->CancelReload();
+        }
+
+        if (InventoryComponent)
+        {
+            //InventoryComponent->SetAdditionalInfoWeapon(OldIndex, GetCurrentWeapon()->AdditionalWeaponInfo);
+            if (InventoryComponent->SwitchWeaponToIndex(CurrentIndexWeapon - 1, OldIndex, OldInfo, false))
+            {
+            }
+        }
+    }
+}
+
 void ATDS123Character::WeaponReloadStart_BP_Implementation(UAnimMontage* Anim)
 {
     //in BP
@@ -314,8 +372,14 @@ void ATDS123Character::ChangeMovementState()
 
 
 
-void ATDS123Character::InitWeapon(FName IdWeapon)
+void ATDS123Character::InitWeapon(FName IdWeapon, FAdditionalWeaponInfo WeaponAdditionalInfo)
 {
+    if (CurrentWeapon)
+    {
+        CurrentWeapon->Destroy();
+        CurrentWeapon = nullptr;
+    }
+
     UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetGameInstance());
     FWeaponInfo myWeaponInfo;
     if (myGI)
@@ -340,8 +404,12 @@ void ATDS123Character::InitWeapon(FName IdWeapon)
                     CurrentWeapon = myWeapon;
                     myWeapon->WeaponSetting = myWeaponInfo;
                     myWeapon->UpdateStateWeapon(MovementState);
-                    myWeapon->WeaponInfo.Round = myWeaponInfo.MaxRound;
+                    myWeapon->AdditionalWeaponInfo.Round = myWeaponInfo.MaxRound;
                     myWeapon->ReloadTime = myWeaponInfo.ReloadTime;
+
+                    myWeapon->AdditionalWeaponInfo = WeaponAdditionalInfo;
+                    if (InventoryComponent)
+                        CurrentIndexWeapon = InventoryComponent->GetWeaponIndexSlotByName(IdWeaponName);
 
                     if(!myWeapon->OnWeaponReloadStart.IsAlreadyBound(this, &ATDS123Character::WeaponReloadStart))
                     myWeapon->OnWeaponReloadStart.AddDynamic(this, &ATDS123Character::WeaponReloadStart);
