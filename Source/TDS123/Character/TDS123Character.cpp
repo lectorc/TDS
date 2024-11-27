@@ -93,7 +93,7 @@ void ATDS123Character::Tick(float DeltaSeconds)
     NewInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &ATDS123Character::InputAttackPressed);
     NewInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Released, this, &ATDS123Character::InputAttackReleased);
     NewInputComponent->BindAction(TEXT("ReloadEvent"), EInputEvent::IE_Released, this, &ATDS123Character::TryReloadWeapon);
-    NewInputComponent->BindAction(TEXT("SwitchNextWeapon"), EInputEvent::IE_Pressed, this, &ATDS123Character::TrySwitchNextWeapon)
+    NewInputComponent->BindAction(TEXT("SwitchNextWeapon"), EInputEvent::IE_Pressed, this, &ATDS123Character::TrySwitchNextWeapon);
     NewInputComponent->BindAction(TEXT("SwitchPreviosWeapon"), EInputEvent::IE_Pressed, this, &ATDS123Character::TrySwitchPreviosWeapon);
 
 }
@@ -263,7 +263,7 @@ void ATDS123Character::WeaponReloadEnd()
     WeaponReloadEnd_BP();
 }
 
-void ATDS123Character::TrySwicthNextWeapon()
+void ATDS123Character::TrySwitchNextWeapon()
 {
     if (InventoryComponent->WeaponSlots.Num() > 1)
     {

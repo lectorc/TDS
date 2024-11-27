@@ -150,7 +150,7 @@ public:
     void WeaponReloadStart_BP(UAnimMontage* Anim);
 
 
-    void TrySwicthNextWeapon();
+    void TrySwitchNextWeapon();
     void TrySwitchPreviosWeapon();
 
     UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)

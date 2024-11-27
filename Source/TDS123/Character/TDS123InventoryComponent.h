@@ -3,10 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "TDS123/FuncLibrary/UType.h"
+#include "Components/ActorComponent.h"
 #include "GameFramework/Actor.h"
 #include "TDS123InventoryComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSwitchWeapon, FName, WeaponIdName, FAdditionalWeaponInfo, WeaponAdditionalInfo, int32, NewCurrentIndexWeapon);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSwitchWeapon, FName, WeaponIdName, FAdditionalWeaponInfo, WeaponAdditionalInfo);
 
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -18,7 +21,7 @@ public:
 	// Sets default values for this actor's properties
 	ATDS123InventoryComponent();
 
-    FOnSwitchWeapon OnSwithcWeapon
+    FOnSwitchWeapon OnSwithWeapon
     
 
 protected:
