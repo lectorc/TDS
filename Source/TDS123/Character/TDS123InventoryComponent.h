@@ -13,15 +13,15 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSwitchWeapon, FName, WeaponIdNam
 
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class TDS123_API ATDS123InventoryComponent : public AActor
+class TDS123_API UTDS123InventoryComponent : public UActorComponent
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ATDS123InventoryComponent();
+	UTDS123InventoryComponent();
 
-    FOnSwitchWeapon OnSwithWeapon
+    FOnSwitchWeapon OnSwitchWeapon;
     
 
 protected:
@@ -30,8 +30,6 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
     virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
     bool SwitchWeaponToIndex(int32 ChangeToIndex, int32 OldIndex, FAdditionalWeaponInfo OldInfo, bool bIsForward);

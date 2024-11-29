@@ -18,6 +18,15 @@ enum class EMovementState : uint8
     SprintRun_State UMETA(DisplayName = "SprintRun State")
 };
 
+UENUM(BlueprintType)
+enum class EWeaponType : uint8
+{
+    RifleType UMETA(DisplayName = "Rifle"),
+    ShotGunType UMETA(DisplayName = "ShotGun"),
+    GrenadeLauncher UMETA(DisplayName = "GrenadeLauncher")
+};
+
+
 USTRUCT(BlueprintType)
 struct FCharacterSpeed
 {
@@ -240,4 +249,28 @@ UCLASS()
 class TDS123_API UTypes : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()
+};
+
+USTRUCT(BlueprintType)
+struct FWeaponSlot
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponSlot")
+    FName NameItem;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponSlot")
+    FAdditionalWeaponInfo AdditionalInfo;
+};
+USTRUCT(BlueprintType)
+struct FAmmoSlot
+{
+    GENERATED_BODY()
+
+    ///Index Slot by Index Array
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AmmoSlot")
+    EWeaponType WeaponType = EWeaponType::RifleType;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AmmoSlot")
+    int32 Cout = 100;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AmmoSlot")
+    int32 MaxCout = 100;
 };

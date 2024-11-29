@@ -60,7 +60,6 @@ void ATDS123Character::BeginPlay()
 {
     Super::BeginPlay();
 
-    InitWeapon(InitWeaponName);
 
 }
 
@@ -372,60 +371,6 @@ void ATDS123Character::ChangeMovementState()
 
 
 
-void ATDS123Character::InitWeapon(FName IdWeapon, FAdditionalWeaponInfo WeaponAdditionalInfo)
-{
-    if (CurrentWeapon)
-    {
-        CurrentWeapon->Destroy();
-        CurrentWeapon = nullptr;
-    }
-
-    UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetGameInstance());
-    FWeaponInfo myWeaponInfo;
-    if (myGI)
-    {
-        if (myGI->GetWeaponInfoByName(IdWeapon, myWeaponInfo))
-        {
-            if (myWeaponInfo.WeaponClass)
-            {
-                FVector SpawnLocation = FVector(0);
-                FRotator SpawnRotation = FRotator(0);
-
-                FActorSpawnParameters SpawnParams;
-                SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-                SpawnParams.Owner = GetOwner();
-                SpawnParams.Instigator = GetInstigator();
-
-                AWeaponDefault* myWeapon = Cast<AWeaponDefault>(GetWorld()->SpawnActor(myWeaponInfo.WeaponClass, &SpawnLocation, &SpawnRotation, SpawnParams));
-                if (myWeapon)
-                {
-                    FAttachmentTransformRules Rule(EAttachmentRule::SnapToTarget, false);
-                    myWeapon->AttachToComponent(GetMesh(), Rule, FName("WeaponSocketRightHand"));
-                    CurrentWeapon = myWeapon;
-                    myWeapon->WeaponSetting = myWeaponInfo;
-                    myWeapon->UpdateStateWeapon(MovementState);
-                    myWeapon->AdditionalWeaponInfo.Round = myWeaponInfo.MaxRound;
-                    myWeapon->ReloadTime = myWeaponInfo.ReloadTime;
-
-                    myWeapon->AdditionalWeaponInfo = WeaponAdditionalInfo;
-                    if (InventoryComponent)
-                        CurrentIndexWeapon = InventoryComponent->GetWeaponIndexSlotByName(IdWeaponName);
-
-                    if(!myWeapon->OnWeaponReloadStart.IsAlreadyBound(this, &ATDS123Character::WeaponReloadStart))
-                    myWeapon->OnWeaponReloadStart.AddDynamic(this, &ATDS123Character::WeaponReloadStart);
-                    if (!myWeapon->OnWeaponReloadEnd.IsAlreadyBound(this, &ATDS123Character::WeaponReloadEnd))
-                    myWeapon->OnWeaponReloadEnd.AddDynamic(this, &ATDS123Character::WeaponReloadEnd);
-                }
-            }
-        }
-        
-    }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("ATDS123Character::InitWeapon - Weapon not found in table -NULL"));
-    }
-}
-
 void ATDS123Character::AttackCharEvent(bool bIsFiring)
 {
     AWeaponDefault* myWeapon = nullptr;
@@ -437,6 +382,63 @@ void ATDS123Character::AttackCharEvent(bool bIsFiring)
     }
     else
         UE_LOG(LogTemp, Warning, TEXT("ATPSCharacter::AttackCharEvent - CurrentWeapon -NULL"));
+}
+
+void ATDS123Character::InitWeapon(FName IdWeapon, FAdditionalWeaponInfo WeaponAdditionalInfo)
+{
+    {
+        if (CurrentWeapon)
+        {
+            CurrentWeapon->Destroy();
+            CurrentWeapon = nullptr;
+        }
+
+        UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetGameInstance());
+        FWeaponInfo myWeaponInfo;
+        if (myGI)
+        {
+            if (myGI->GetWeaponInfoByName(IdWeapon, myWeaponInfo))
+            {
+                if (myWeaponInfo.WeaponClass)
+                {
+                    FVector SpawnLocation = FVector(0);
+                    FRotator SpawnRotation = FRotator(0);
+
+                    FActorSpawnParameters SpawnParams;
+                    SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+                    SpawnParams.Owner = GetOwner();
+                    SpawnParams.Instigator = GetInstigator();
+
+                    AWeaponDefault* myWeapon = Cast<AWeaponDefault>(GetWorld()->SpawnActor(myWeaponInfo.WeaponClass, &SpawnLocation, &SpawnRotation, SpawnParams));
+                    if (myWeapon)
+                    {
+                        FAttachmentTransformRules Rule(EAttachmentRule::SnapToTarget, false);
+                        myWeapon->AttachToComponent(GetMesh(), Rule, FName("WeaponSocketRightHand"));
+                        CurrentWeapon = myWeapon;
+                        myWeapon->WeaponSetting = myWeaponInfo;
+                        myWeapon->UpdateStateWeapon(MovementState);
+                        myWeapon->AdditionalWeaponInfo.Round = myWeaponInfo.MaxRound;
+                        myWeapon->ReloadTime = myWeaponInfo.ReloadTime;
+
+                        myWeapon->AdditionalWeaponInfo = WeaponAdditionalInfo;
+                        if (InventoryComponent)
+                            CurrentIndexWeapon = InventoryComponent->GetWeaponIndexSlotByName(IdWeaponName);
+
+                        if (!myWeapon->OnWeaponReloadStart.IsAlreadyBound(this, &ATDS123Character::WeaponReloadStart))
+                            myWeapon->OnWeaponReloadStart.AddDynamic(this, &ATDS123Character::WeaponReloadStart);
+                        if (!myWeapon->OnWeaponReloadEnd.IsAlreadyBound(this, &ATDS123Character::WeaponReloadEnd))
+                            myWeapon->OnWeaponReloadEnd.AddDynamic(this, &ATDS123Character::WeaponReloadEnd);
+                    }
+                }
+            }
+
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("ATDS123Character::InitWeapon - Weapon not found in table -NULL"));
+        }
+    }
+
 }
 
 void ATDS123Character::TryReloadWeapon()
