@@ -437,8 +437,8 @@ void AWeaponDefault::FinishReload()
 {
     WeaponReloading = false;
     AdditionalWeaponInfo.Round = WeaponSetting.MaxRound;
-
-    OnWeaponReloadEnd.Broadcast();
+        
+    OnWeaponReloadEnd.Broadcast(true);
 }
 
 void AWeaponDefault::InitDropMesh(UStaticMesh* DropMesh, FTransform Offset, FVector DropImpulseDirection, float LifeTimeMesh, float ImpulseRandomDispersion, float PowerImpulse, float CustomMass)
@@ -505,6 +505,6 @@ void AWeaponDefault::CancelReload()
     if (SkeletalMeshWeapon && SkeletalMeshWeapon->GetAnimInstance())
         SkeletalMeshWeapon->GetAnimInstance()->StopAllMontages(0.15f);
 
-    OnWeaponReloadEnd.Broadcast();
+    OnWeaponReloadEnd.Broadcast(false);
     DropClipFlag = false;
 }

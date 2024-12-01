@@ -14,7 +14,7 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponReloadStart,UAnimMontage*, Anim);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeaponReloadEnd);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponReloadEnd,bool, bIsSuccess);
 
 UCLASS()
 class TDS123_API AWeaponDefault : public AActor

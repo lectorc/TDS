@@ -1,5 +1,4 @@
 
-#include "Character/TDS123InventoryComponent.h"
 #include "TDS123InventoryComponent.h"
 
 // Sets default values

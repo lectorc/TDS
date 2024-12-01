@@ -140,10 +140,10 @@ public:
     
 
     UFUNCTION()
-    void WeaponReloadEnd();
+    void WeaponReloadEnd(bool bIsSuccess);
 
     UFUNCTION(BlueprintNativeEvent)
-    void WeaponReloadEnd_BP();
+    void WeaponReloadEnd_BP(bool bIsSuccess);
 
     UFUNCTION(BlueprintNativeEvent)
     void WeaponReloadStart_BP(UAnimMontage* Anim);

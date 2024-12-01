@@ -257,9 +257,9 @@ void ATDS123Character::ChangeMovementStateToWalk()
     
 }
 
-void ATDS123Character::WeaponReloadEnd()
+void ATDS123Character::WeaponReloadEnd(bool bIsSuccess)
 {
-    WeaponReloadEnd_BP();
+    WeaponReloadEnd_BP(bIsSuccess);
 }
 
 void ATDS123Character::TrySwitchNextWeapon()
@@ -314,7 +314,7 @@ void ATDS123Character::WeaponReloadStart_BP_Implementation(UAnimMontage* Anim)
     //in BP
 }
 
-void ATDS123Character::WeaponReloadEnd_BP_Implementation()
+void ATDS123Character::WeaponReloadEnd_BP_Implementation(bool bIsSuccess)
 {
     //in BP
 }
@@ -422,7 +422,7 @@ void ATDS123Character::InitWeapon(FName IdWeapon, FAdditionalWeaponInfo WeaponAd
 
                         myWeapon->AdditionalWeaponInfo = WeaponAdditionalInfo;
                         if (InventoryComponent)
-                            CurrentIndexWeapon = InventoryComponent->GetWeaponIndexSlotByName(IdWeaponName);
+                            CurrentIndexWeapon = InventoryComponent->GetWeaponIndexSlotByName(InitWeaponName);
 
                         if (!myWeapon->OnWeaponReloadStart.IsAlreadyBound(this, &ATDS123Character::WeaponReloadStart))
                             myWeapon->OnWeaponReloadStart.AddDynamic(this, &ATDS123Character::WeaponReloadStart);
