@@ -72,10 +72,10 @@ void AProjectileDefault::InitProjectile(FProjectileInfo InitParam)
     else
         BulletMesh->DestroyComponent();
 
-    if (InitParam.ProjectileTrailFX)
+    if (InitParam.ProjectileTrailFx)
     {
-        BulletFX->SetTemplate(InitParam.ProjectileTrailFX);
-        BulletFX->SetRelativeTransform(InitParam.ProjectileTrailFXOffset);
+        BulletFX->SetTemplate(InitParam.ProjectileTrailFx);
+        BulletFX->SetRelativeTransform(InitParam.ProjectileTrailFxOffset);
     }
     else
         BulletFX->DestroyComponent();

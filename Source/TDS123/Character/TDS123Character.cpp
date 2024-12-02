@@ -162,16 +162,16 @@ void ATDS123Character::CharacterUpdate()
     switch (MovementState)
     {
     case EMovementState::Aim_State:
-        ResSpeed = MovementInfo.AimSpeed;
+        ResSpeed = MovementInfo.AimSpeedNormal;
         break;
     case EMovementState::Walk_State:
-        ResSpeed = MovementInfo.WalkSpeed;
+        ResSpeed = MovementInfo.WalkSpeedNormal;
         break;
     case EMovementState::Run_State:
-        ResSpeed = MovementInfo.RunSpeed;
+        ResSpeed = MovementInfo.RunSpeedNormal;
         break;
     case EMovementState::Sprint_State:
-        ResSpeed = MovementInfo.SprintSpeed;
+        ResSpeed = MovementInfo.SprintSpeedNormal;
         AddMovementInput(FVector(0.0f, 0.0f, 0.0f), AxisY);
     default:
         break;

@@ -6,10 +6,12 @@
 #include "TDS123/FuncLibrary/UType.h"
 #include "Components/ActorComponent.h"
 #include "GameFramework/Actor.h"
+#include "TDS123/Game/TDS123GameInstance.h"
 #include "TDS123InventoryComponent.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSwitchWeapon, FName, WeaponIdName, FAdditionalWeaponInfo, WeaponAdditionalInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSwitchWeapon, FName, WeaponIdName, FAdditionalWeaponInfo, WeaponAdditionalInfo, int32, NewCurrentIndexWeapon);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponAdditionalInfoChange, int32, IndexSlot, FAdditionalWeaponInfo, AdditionalInfo);
 
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -38,6 +40,10 @@ public:
     TArray<FWeaponSlot> WeaponSlots;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapons")
     TArray<FAmmoSlot> AmmoSlots;
+    UPROPERTY(BlueprintAssignable, EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+    FOnWeaponAdditionalInfoChange OnWeaponAdditionalInfoChange;
+
+    int32 MaxSlotsWeapon = 0;
 
     FAdditionalWeaponInfo GetAdditionalInfoWeapon(int32 IndexWeapon);
     int32 GetWeaponIndexSlotByName(FName IdWeaponName);

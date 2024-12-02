@@ -1,8 +1,9 @@
 
 #include "TDS123InventoryComponent.h"
+#include "TDS123/Game/TDS123GameInstance.h"
 
 // Sets default values
-ATDS123InventoryComponent::ATDS123InventoryComponent()
+UTDS123InventoryComponent::UTDS123InventoryComponent()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -10,13 +11,13 @@ ATDS123InventoryComponent::ATDS123InventoryComponent()
 }
 
 // Called when the game starts or when spawned
-void ATDS123InventoryComponent::BeginPlay()
+void UTDS123InventoryComponent::BeginPlay()
 {
     Super::BeginPlay();
 
     for (int8 i = 0; i < WeaponSlots.Num(); i++)
     {
-        UTPSGameInstance* myGI = Cast<UTPSGameInstance>(GetWorld()->GetGameInstance());
+        UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetWorld()->GetGameInstance());
         if (myGI)
         {
             if (!WeaponSlots[i].NameItem.IsNone())
@@ -43,19 +44,14 @@ void ATDS123InventoryComponent::BeginPlay()
 	
 }
 
-// Called every frame
-void ATDS123InventoryComponent::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 
-}
 
-void ATDS123InventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UTDS123InventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-bool ATDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 OldIndex, FAdditionalWeaponInfo OldInfo, bool bIsForward)
+bool UTDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 OldIndex, FAdditionalWeaponInfo OldInfo, bool bIsForward)
 {
     bool bIsSuccess = false;
     int8 CorrectIndex = ChangeToIndex;
@@ -80,7 +76,7 @@ bool ATDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 O
             }
             else
             {
-                UTPSGameInstance* myGI = Cast<UTPSGameInstance>(GetWorld()->GetGameInstance());
+                UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetWorld()->GetGameInstance());
                 if (myGI)
                 {
                     //check ammoSlots for this weapon
@@ -135,7 +131,7 @@ bool ATDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 O
                         else
                         {
                             FWeaponInfo myInfo;
-                            UTPSGameInstance* myGI = Cast<UTPSGameInstance>(GetWorld()->GetGameInstance());
+                            UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetWorld()->GetGameInstance());
 
                             myGI->GetWeaponInfoByName(WeaponSlots[tmpIndex].NameItem, myInfo);
 
@@ -177,7 +173,7 @@ bool ATDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 O
                                 else
                                 {
                                     FWeaponInfo myInfo;
-                                    UTPSGameInstance* myGI = Cast<UTPSGameInstance>(GetWorld()->GetGameInstance());
+                                    UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetWorld()->GetGameInstance());
 
                                     myGI->GetWeaponInfoByName(WeaponSlots[Seconditeration].NameItem, myInfo);
 
@@ -214,7 +210,7 @@ bool ATDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 O
                                 else
                                 {
                                     FWeaponInfo myInfo;
-                                    UTPSGameInstance* myGI = Cast<UTPSGameInstance>(GetWorld()->GetGameInstance());
+                                    UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetWorld()->GetGameInstance());
 
                                     myGI->GetWeaponInfoByName(WeaponSlots[Seconditeration].NameItem, myInfo);
 
@@ -231,7 +227,7 @@ bool ATDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 O
                                             else
                                             {
                                                 //Not find weapon with amm need init Pistol with infinity ammo
-                                                UE_LOG(LogTemp, Error, TEXT("UTPSInventoryComponent::SwitchWeaponToIndex - Init PISTOL - NEED"));
+                                                UE_LOG(LogTemp, Error, TEXT("UTDS123InventoryComponent::SwitchWeaponToIndex - Init PISTOL - NEED"));
                                             }
                                         }
                                         j++;
@@ -267,7 +263,7 @@ bool ATDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 O
                         else
                         {
                             FWeaponInfo myInfo;
-                            UTPSGameInstance* myGI = Cast<UTPSGameInstance>(GetWorld()->GetGameInstance());
+                            UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetWorld()->GetGameInstance());
 
                             myGI->GetWeaponInfoByName(WeaponSlots[tmpIndex].NameItem, myInfo);
 
@@ -309,7 +305,7 @@ bool ATDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 O
                                 else
                                 {
                                     FWeaponInfo myInfo;
-                                    UTPSGameInstance* myGI = Cast<UTPSGameInstance>(GetWorld()->GetGameInstance());
+                                    UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetWorld()->GetGameInstance());
 
                                     myGI->GetWeaponInfoByName(WeaponSlots[Seconditeration].NameItem, myInfo);
 
@@ -346,7 +342,7 @@ bool ATDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 O
                                 else
                                 {
                                     FWeaponInfo myInfo;
-                                    UTPSGameInstance* myGI = Cast<UTPSGameInstance>(GetWorld()->GetGameInstance());
+                                    UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetWorld()->GetGameInstance());
 
                                     myGI->GetWeaponInfoByName(WeaponSlots[Seconditeration].NameItem, myInfo);
 
@@ -363,7 +359,7 @@ bool ATDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 O
                                             else
                                             {
                                                 //Not find weapon with amm need init Pistol with infinity ammo
-                                                UE_LOG(LogTemp, Error, TEXT("UTPSInventoryComponent::SwitchWeaponToIndex - Init PISTOL - NEED"));
+                                                UE_LOG(LogTemp, Error, TEXT("UTDS123InventoryComponent::SwitchWeaponToIndex - Init PISTOL - NEED"));
                                             }
                                         }
                                         j++;
@@ -389,7 +385,7 @@ bool ATDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 O
     return bIsSuccess;
 }
 
-FAdditionalWeaponInfo ATDS123InventoryComponent::GetAdditionalInfoWeapon(int32 IndexWeapon)
+FAdditionalWeaponInfo UTDS123InventoryComponent::GetAdditionalInfoWeapon(int32 IndexWeapon)
 {
     FAdditionalWeaponInfo result;
     if (WeaponSlots.IsValidIndex(IndexWeapon))
@@ -414,7 +410,7 @@ FAdditionalWeaponInfo ATDS123InventoryComponent::GetAdditionalInfoWeapon(int32 I
     return result;
 }
 
-int32 ATDS123InventoryComponent::GetWeaponIndexSlotByName(FName IdWeaponName)
+int32 UTDS123InventoryComponent::GetWeaponIndexSlotByName(FName IdWeaponName)
 {
     int32 result = -1;
     int8 i = 0;
@@ -431,7 +427,7 @@ int32 ATDS123InventoryComponent::GetWeaponIndexSlotByName(FName IdWeaponName)
     return result;
 }
 
-void ATDS123InventoryComponent::SetAdditionalInfoWeapon(int32 IndexWeapon, FAdditionalWeaponInfo NewInfo)
+void UTDS123InventoryComponent::SetAdditionalInfoWeapon(int32 IndexWeapon, FAdditionalWeaponInfo NewInfo)
 {
     if (WeaponSlots.IsValidIndex(IndexWeapon))
     {
