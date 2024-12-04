@@ -72,13 +72,13 @@ public:
     void SetWeaponStateFire(bool bIsFire);
 
     bool CheckWeaponCanFire();
-
+    bool CheckCanWeaponReload();
     
 
     FProjectileInfo GetProjectile();
 
     void Fire();
-
+    
     void UpdateStateWeapon(EMovementState NewMovementState);
     void ChangeDispersion();
     void DispersionTick(float DeltaTime);

@@ -131,7 +131,7 @@ public:
         AWeaponDefault* GetCurrentWeapon();
 
     UFUNCTION(BlueprintCallable)
-    void InitWeapon(FName IdWeapon, FAdditionalWeaponInfo WeaponAdditionalInfo);
+    void InitWeapon(FName IdWeaponName, FAdditionalWeaponInfo WeaponAdditionalInfo, int32 NewCurrentIndexWeapon);
     UFUNCTION(BlueprintCallable)
     void TryReloadWeapon();
 
