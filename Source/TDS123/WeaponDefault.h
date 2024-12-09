@@ -5,12 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/ArrowComponent.h"
-#include "Kismet/GameplayStatics.h"
-
 #include "FuncLibrary/UType.h"
 #include "ProjectileDefault.h"
-#include "Engine/StaticMeshActor.h"
 #include "WeaponDefault.generated.h"
+
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponReloadStart,UAnimMontage*, Anim);

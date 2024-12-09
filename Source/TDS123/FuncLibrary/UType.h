@@ -225,10 +225,9 @@ struct FWeaponInfo : public FTableRowBase
 
     //inv
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory ")
-    float SwitchTimeToWeapon = 1.0f;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory ")
     UTexture2D* WeaponIcon = nullptr;
+
+    
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory ")
     EWeaponType WeaponType = EWeaponType::RifleType;
 };

@@ -419,7 +419,7 @@ void ATDS123Character::InitWeapon( FName IdWeaponName, FAdditionalWeaponInfo Wea
 
                     //myWeapon->AdditionalWeaponInfo.Round = myWeaponInfo.MaxRound;
 
-                    myWeapon->ReloadTime = myWeaponInfo.ReloadTime;
+                        myWeapon->ReloadTime = myWeaponInfo.ReloadTime;
                     myWeapon->UpdateStateWeapon(MovementState);
 
                     myWeapon->AdditionalWeaponInfo = WeaponAdditionalInfo;
@@ -429,7 +429,7 @@ void ATDS123Character::InitWeapon( FName IdWeaponName, FAdditionalWeaponInfo Wea
                     //Not Forget remove delegate on change/drop weapon
                     if (!myWeapon->OnWeaponReloadStart.IsAlreadyBound(this, &ATDS123Character::WeaponReloadStart))
                     myWeapon->OnWeaponReloadStart.AddDynamic(this, &ATDS123Character::WeaponReloadStart);
-                    if (!myWeapon->OnWeaponReloadStart.IsAlreadyBound(this, &ATDS123Character::WeaponReloadEnd))
+                    if (!myWeapon->OnWeaponReloadEnd.IsAlreadyBound(this, &ATDS123Character::WeaponReloadEnd))
                     myWeapon->OnWeaponReloadEnd.AddDynamic(this, &ATDS123Character::WeaponReloadEnd);
 
                     // after switch try reload weapon if needed

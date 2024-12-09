@@ -1,18 +1,17 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "TDS123/FuncLibrary/UType.h"
 #include "Components/ActorComponent.h"
-#include "GameFramework/Actor.h"
-#include "TDS123/Game/TDS123GameInstance.h"
 #include "TDS123InventoryComponent.generated.h"
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSwitchWeapon, FName, WeaponIdName, FAdditionalWeaponInfo, WeaponAdditionalInfo, int32, NewCurrentIndexWeapon);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponAdditionalInfoChange, int32, IndexSlot, FAdditionalWeaponInfo, AdditionalInfo);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponAmmoAviable, EWeaponType, WeaponType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponAmmoEmpty, EWeaponType, WeaponType);
 
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -37,6 +36,8 @@ public:
 
     bool SwitchWeaponToIndex(int32 ChangeToIndex, int32 OldIndex, FAdditionalWeaponInfo OldInfo, bool bIsForward);
 
+    bool CheckAmmoForWeapon(EWeaponType TypeWeapon, int8& AviableAmmoForWeapon);
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapons")
     TArray<FWeaponSlot> WeaponSlots;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapons")
@@ -45,8 +46,14 @@ public:
     FOnWeaponAdditionalInfoChange OnWeaponAdditionalInfoChange;
     UPROPERTY(BlueprintAssignable, EditAnywhere, BlueprintReadWrite, Category = "Inventory")
     FOnWeaponAmmoAviable OnWeaponAmmoAviable;
-
+    UPROPERTY(BlueprintAssignable, EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+    FOnWeaponAmmoEmpty OnWeaponAmmoEmpty;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
     int32 MaxSlotsWeapon = 0;
+
+ 
+
+
 
     FAdditionalWeaponInfo GetAdditionalInfoWeapon(int32 IndexWeapon);
     int32 GetWeaponIndexSlotByName(FName IdWeaponName);

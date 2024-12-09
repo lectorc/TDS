@@ -1,8 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "WeaponDefault.h"
+#include "DrawDebugHelpers.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/StaticMeshActor.h"
-#include "Kismet/KismetMathLibrary.h"
+#include "TDS123/Character/TDS123InventoryComponent.h"
 
 // Sets default values
 AWeaponDefault::AWeaponDefault()
@@ -145,6 +147,24 @@ void AWeaponDefault::SetWeaponStateFire(bool bIsFire)
 bool AWeaponDefault::CheckWeaponCanFire()
 {
     return !BlockFire;
+}
+
+bool AWeaponDefault::CheckCanWeaponReload()
+{
+    bool result = true;
+    if (GetOwner())
+    {
+        UTDS123InventoryComponent* MyInv = Cast<UTDS123InventoryComponent>(GetOwner()->GetComponentByClass(UTDS123InventoryComponent::StaticClass()));
+        if (MyInv)
+        {
+            int8 AviableAmmoForWeapon;
+            if (!MyInv->CheckAmmoForWeapon(WeaponSetting.WeaponType, AviableAmmoForWeapon))
+            {
+                result = false;
+            }
+        }
+    }
+    return result;
 }
 
 FProjectileInfo AWeaponDefault::GetProjectile()

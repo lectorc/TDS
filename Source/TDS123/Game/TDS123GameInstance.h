@@ -6,7 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "TDS123/FuncLibrary/UType.h"
 #include "Engine/DataTable.h"
-#include "TDS123/WeaponDefault.h"
+
 #include "TDS123GameInstance.generated.h"
 
 /**

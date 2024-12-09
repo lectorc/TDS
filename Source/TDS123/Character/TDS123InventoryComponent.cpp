@@ -1,12 +1,12 @@
-
 #include "TDS123InventoryComponent.h"
 #include "TDS123/Game/TDS123GameInstance.h"
+#pragma optimize ("", off)
 
 // Sets default values
 UTDS123InventoryComponent::UTDS123InventoryComponent()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = true;
 
 }
 
@@ -27,8 +27,8 @@ void UTDS123InventoryComponent::BeginPlay()
                     WeaponSlots[i].AdditionalInfo.Round = Info.MaxRound;
                 else
                 {
-                    //WeaponSlots.RemoveAt(i);
-                    //i--;
+                    WeaponSlots.RemoveAt(i);
+                    i--;
                 }
             }
         }
@@ -385,6 +385,33 @@ bool UTDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 O
     return bIsSuccess;
 }
 
+bool UTDS123InventoryComponent::CheckAmmoForWeapon(EWeaponType TypeWeapon, int8& AviableAmmoForWeapon)
+{
+    AviableAmmoForWeapon = 0;
+    bool bIsFind = false;
+    int8 i = 0;
+    while (i < AmmoSlots.Num() && !bIsFind)
+    {
+        if (AmmoSlots[i].WeaponType == TypeWeapon)
+        {
+            bIsFind = true;
+            AviableAmmoForWeapon = AmmoSlots[i].Cout;
+            if (AmmoSlots[i].Cout > 0)
+            {
+                //OnWeaponAmmoAviable.Broadcast(TypeWeapon);//remove not here, only when pickUp ammo this type, or swithc weapon
+                return true;
+            }
+
+        }
+
+        i++;
+    }
+
+    OnWeaponAmmoEmpty.Broadcast(TypeWeapon);//visual empty ammo slot
+
+    return false;
+}
+
 FAdditionalWeaponInfo UTDS123InventoryComponent::GetAdditionalInfoWeapon(int32 IndexWeapon)
 {
     FAdditionalWeaponInfo result;
@@ -394,7 +421,7 @@ FAdditionalWeaponInfo UTDS123InventoryComponent::GetAdditionalInfoWeapon(int32 I
         int8 i = 0;
         while (i < WeaponSlots.Num() && !bIsFind)
         {
-            if (/*WeaponSlots[i].IndexSlot*/i == IndexWeapon)
+            if (i == IndexWeapon)
             {
                 result = WeaponSlots[i].AdditionalInfo;
                 bIsFind = true;
@@ -420,7 +447,7 @@ int32 UTDS123InventoryComponent::GetWeaponIndexSlotByName(FName IdWeaponName)
         if (WeaponSlots[i].NameItem == IdWeaponName)
         {
             bIsFind = true;
-            result = i/*WeaponSlots[i].IndexSlot*/;
+            result = i;
         }
         i++;
     }
@@ -435,7 +462,7 @@ void UTDS123InventoryComponent::SetAdditionalInfoWeapon(int32 IndexWeapon, FAddi
         int8 i = 0;
         while (i < WeaponSlots.Num() && !bIsFind)
         {
-            if (/*WeaponSlots[i].IndexSlot*/i == IndexWeapon)
+            if (i == IndexWeapon)
             {
                 WeaponSlots[i].AdditionalInfo = NewInfo;
                 bIsFind = true;
