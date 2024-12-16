@@ -257,8 +257,13 @@ void ATDS123Character::ChangeMovementStateToWalk()
     
 }
 
-void ATDS123Character::WeaponReloadEnd(bool bIsSuccess)
+void ATDS123Character::WeaponReloadEnd(bool bIsSuccess, int32 AmmoTake)
 {
+    if (InventoryComponent && CurrentWeapon)
+    {
+        InventoryComponent->AmmoSlotChangeValue(CurrentWeapon->WeaponSetting.WeaponType, AmmoTake);
+        InventoryComponent->SetAdditionalInfoWeapon(CurrentIndexWeapon, CurrentWeapon->AdditionalWeaponInfo);
+    }
     WeaponReloadEnd_BP(bIsSuccess);
 }
 
@@ -381,7 +386,7 @@ void ATDS123Character::AttackCharEvent(bool bIsFiring)
         myWeapon->SetWeaponStateFire(bIsFiring);
     }
     else
-        UE_LOG(LogTemp, Warning, TEXT("ATPSCharacter::AttackCharEvent - CurrentWeapon -NULL"));
+        UE_LOG(LogTemp, Warning, TEXT("ATDS123Character::AttackCharEvent - CurrentWeapon -NULL"));
 }
 
 void ATDS123Character::InitWeapon( FName IdWeaponName, FAdditionalWeaponInfo WeaponAdditionalInfo, int32 NewCurrentIndexWeapon)

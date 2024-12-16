@@ -1,4 +1,12 @@
 #include "TDS123InventoryComponent.h"
+#include "TDS123InventoryComponent.h"
+#include "TDS123InventoryComponent.h"
+#include "TDS123InventoryComponent.h"
+#include "TDS123InventoryComponent.h"
+#include "TDS123InventoryComponent.h"
+#include "TDS123InventoryComponent.h"
+#include "TDS123InventoryComponent.h"
+#include "TDS123InventoryComponent.h"
 #include "TDS123/Game/TDS123GameInstance.h"
 #pragma optimize ("", off)
 
@@ -8,6 +16,17 @@ UTDS123InventoryComponent::UTDS123InventoryComponent()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryComponentTick.bCanEverTick = true;
 
+}
+
+FName UTDS123InventoryComponent::GetWeaponNameBySlotIndex(int32 indexSlot)
+{
+    FName result;
+
+    if (WeaponSlots.IsValidIndex(indexSlot))
+    {
+        result = WeaponSlots[indexSlot].NameItem;
+    }
+    return result;
 }
 
 // Called when the game starts or when spawned
@@ -412,6 +431,86 @@ bool UTDS123InventoryComponent::CheckAmmoForWeapon(EWeaponType TypeWeapon, int8&
     return false;
 }
 
+bool UTDS123InventoryComponent::CheckCanTakeAmmo(EWeaponType AmmoType)
+{
+    bool result = false;
+    int8 i = 0;
+    while (i < AmmoSlots.Num() && !result)
+    {
+        if (AmmoSlots[i].WeaponType == AmmoType && AmmoSlots[i].Cout < AmmoSlots[i].MaxCout)
+            result = true;
+        i++;
+    }
+    return result;
+}
+
+bool UTDS123InventoryComponent::CheckCanTakeWeapon(int32& FreeSlot)
+{
+    bool bIsFreeSlot = false;
+    int8 i = 0;
+    while (i < WeaponSlots.Num() && !bIsFreeSlot)
+    {
+        if (WeaponSlots[i].NameItem.IsNone())
+        {
+            bIsFreeSlot = true;
+            FreeSlot = i;
+        }
+        i++;
+    }
+    return bIsFreeSlot;
+}
+
+bool UTDS123InventoryComponent::SwitchWeaponToInventory(FWeaponSlot NewWeapon, int32 IndexSlot, int32 CurrentIndexWeaponChar, FDropItem& DropItemInfo)
+{
+    bool result = false;
+
+    if (WeaponSlots.IsValidIndex(IndexSlot) && GetDropItemInfoFromInventory(IndexSlot, DropItemInfo))
+    {
+        WeaponSlots[IndexSlot] = NewWeapon;
+
+        SwitchWeaponToIndex(CurrentIndexWeaponChar, -1, NewWeapon.AdditionalInfo, true);
+
+        OnUpdateWeaponSlots.Broadcast(IndexSlot, NewWeapon);
+        result = true;
+    }
+    return result;
+}
+
+bool UTDS123InventoryComponent::TryGetWeaponToInventory(FWeaponSlot NewWeapon)
+{
+    int32 indexSlot = -1;
+    if (CheckCanTakeWeapon(indexSlot))
+    {
+        if (WeaponSlots.IsValidIndex(indexSlot))
+        {
+            WeaponSlots[indexSlot] = NewWeapon;
+
+            OnUpdateWeaponSlots.Broadcast(indexSlot, NewWeapon);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool UTDS123InventoryComponent::GetDropItemInfoFromInventory(int32 IndexSlot, FDropItem& DropItemInfo)
+{
+    bool result = false;
+
+    FName DropItemName = GetWeaponNameBySlotIndex(IndexSlot);
+
+    UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetWorld()->GetGameInstance());
+    if (myGI)
+    {
+        result = myGI->GetDropItemInfoByName(DropItemName, DropItemInfo);
+        if (WeaponSlots.IsValidIndex(IndexSlot))
+        {
+            DropItemInfo.WeaponInfo.AdditionalInfo = WeaponSlots[IndexSlot].AdditionalInfo;
+        }
+    }
+
+    return result;
+}
+
 FAdditionalWeaponInfo UTDS123InventoryComponent::GetAdditionalInfoWeapon(int32 IndexWeapon)
 {
     FAdditionalWeaponInfo result;
@@ -425,6 +524,7 @@ FAdditionalWeaponInfo UTDS123InventoryComponent::GetAdditionalInfoWeapon(int32 I
             {
                 result = WeaponSlots[i].AdditionalInfo;
                 bIsFind = true;
+                OnAmmoChange.Broadcast(EWeaponType::RifleType, 32);
             }
             i++;
         }
@@ -467,7 +567,7 @@ void UTDS123InventoryComponent::SetAdditionalInfoWeapon(int32 IndexWeapon, FAddi
                 WeaponSlots[i].AdditionalInfo = NewInfo;
                 bIsFind = true;
 
-                OnWeaponAdditionalInfoChange.Broadcast(IndexWeapon, NewInfo);
+               
             }
             i++;
         }
@@ -477,4 +577,26 @@ void UTDS123InventoryComponent::SetAdditionalInfoWeapon(int32 IndexWeapon, FAddi
     else
         UE_LOG(LogTemp, Warning, TEXT("UTDS123InventoryComponent::SetAdditionalInfoWeapon - Not Correct index Weapon - %d"), IndexWeapon);
 }
+
+void UTDS123InventoryComponent::AmmoSlotChangeValue(EWeaponType TypeWeapon, int32 CoutChangeAmmo)
+{
+    bool bIsFind = false;
+    int8 i = 0;
+    while (i < AmmoSlots.Num() && !bIsFind)
+    {
+        if (AmmoSlots[i].WeaponType == TypeWeapon)
+        {
+            AmmoSlots[i].Cout += CoutChangeAmmo;
+            if (AmmoSlots[i].Cout > AmmoSlots[i].MaxCout)
+                AmmoSlots[i].Cout = AmmoSlots[i].MaxCout;
+
+            OnAmmoChange.Broadcast(AmmoSlots[i].WeaponType, AmmoSlots[i].Cout);
+
+            bIsFind = true;
+        }
+        i++;
+    }
+}
+
+
 

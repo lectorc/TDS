@@ -140,7 +140,7 @@ public:
     
 
     UFUNCTION()
-    void WeaponReloadEnd(bool bIsSuccess);
+    void WeaponReloadEnd(bool bIsSuccess, int32 AmmoSafe);
 
     UFUNCTION(BlueprintNativeEvent)
     void WeaponReloadEnd_BP(bool bIsSuccess);
