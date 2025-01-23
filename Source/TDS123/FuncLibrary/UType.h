@@ -252,7 +252,7 @@ struct FWeaponSlot
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponSlot")
     FAdditionalWeaponInfo AdditionalInfo;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponSlot")
-    int32 IndexSlot = 3;
+    int32 IndexSlot = 0;
 };
 USTRUCT(BlueprintType)
 struct FAmmoSlot
