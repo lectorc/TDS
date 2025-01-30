@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "TDS123/FuncLibrary/UType.h"
 #include "Components/ActorComponent.h"
+#include "TDS123/Character/TDS123Character.h"
 #include "TDS123InventoryComponent.generated.h"
+
 
 
 
@@ -80,4 +82,7 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "Interface")
     bool GetDropItemInfoFromInventory(int32 IndexSlot, FDropItem& DropItemInfo);
+    UFUNCTION(BlueprintCallable, Category = "Interface")
+    void WeaponChangeAmmo(EWeaponType TypeWeapon, int32 AmmoTaken);
+    
 };

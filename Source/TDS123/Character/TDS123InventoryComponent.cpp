@@ -66,7 +66,7 @@ bool UTDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 O
 {
     bool bIsSuccess = false;
     int8 CorrectIndex = ChangeToIndex;
-    if (ChangeToIndex > WeaponSlots.Num() - 1)
+    if (ChangeToIndex > WeaponSlots.Num())
         CorrectIndex = 0;
     else
         if (ChangeToIndex < 0)
@@ -74,7 +74,8 @@ bool UTDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 O
 
     FName NewIdWeapon;
     FAdditionalWeaponInfo NewAdditionalInfo;
-    int32 NewCurrentIndex = 0;
+    int32 NewCurrentIndex = CorrectIndex;
+    
 
     int8 i = 0;
     while (i < WeaponSlots.Num() && !bIsSuccess)
@@ -215,6 +216,26 @@ bool UTDS123InventoryComponent::GetDropItemInfoFromInventory(int32 IndexSlot, FD
     return result;
 }
 
+void UTDS123InventoryComponent::WeaponChangeAmmo(EWeaponType TypeWeapon, int32 AmmoTaken)
+{
+    bool bIsFind = false;
+    int8 i = 0;
+    while (i < AmmoSlots.Num() && !bIsFind)
+    {
+        if (AmmoSlots[i].WeaponType == TypeWeapon)
+        {
+            AmmoSlots[i].Cout += AmmoTaken;
+            if (AmmoSlots[i].Cout > AmmoSlots[i].MaxCout)
+                AmmoSlots[i].Cout = AmmoSlots[i].MaxCout;
+
+            OnAmmoChange.Broadcast(AmmoSlots[i].WeaponType, AmmoSlots[i].Cout);
+
+            bIsFind = true;
+        }
+        i++;
+    }
+}
+
 FAdditionalWeaponInfo UTDS123InventoryComponent::GetAdditionalInfoWeapon(int32 IndexWeapon)
 {
     FAdditionalWeaponInfo result;
@@ -271,6 +292,7 @@ void UTDS123InventoryComponent::SetAdditionalInfoWeapon(int32 IndexWeapon, FAddi
                 WeaponSlots[i].AdditionalInfo = NewInfo;
                 bIsFind = true;
 
+                OnWeaponAdditionalInfoChange.Broadcast(IndexWeapon, NewInfo);
                
             }
             i++;

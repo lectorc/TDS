@@ -10,7 +10,7 @@
 #include "WeaponDefault.generated.h"
 
 
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponFireStart,UAnimMontage*, AnimFireChar);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponReloadStart,UAnimMontage*, Anim);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeaponReloadEnd,bool, bIsSuccess, int32, AmmoSafe);
 
@@ -25,6 +25,7 @@ public:
 
     FOnWeaponReloadEnd OnWeaponReloadEnd;
     FOnWeaponReloadStart OnWeaponReloadStart;
+    FOnWeaponFireStart WeaponFireStart;
 
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)

@@ -263,8 +263,16 @@ void ATDS123Character::WeaponReloadEnd(bool bIsSuccess, int32 AmmoTake)
     {
         InventoryComponent->AmmoSlotChangeValue(CurrentWeapon->WeaponSetting.WeaponType, AmmoTake);
         InventoryComponent->SetAdditionalInfoWeapon(CurrentIndexWeapon, CurrentWeapon->AdditionalWeaponInfo);
+        InventoryComponent->WeaponChangeAmmo(CurrentWeapon->WeaponSetting.WeaponType, AmmoTake);
     }
     WeaponReloadEnd_BP(bIsSuccess);
+}
+
+void ATDS123Character::WeaponFireStart(UAnimMontage* AnimFireChar)
+{
+    if (InventoryComponent && CurrentWeapon)
+        InventoryComponent->SetAdditionalInfoWeapon(CurrentIndexWeapon, CurrentWeapon->AdditionalWeaponInfo);
+    WeaponFireStart_BP(AnimFireChar);
 }
 
 void ATDS123Character::TrySwitchNextWeapon()
@@ -436,7 +444,8 @@ void ATDS123Character::InitWeapon( FName IdWeaponName, FAdditionalWeaponInfo Wea
                     myWeapon->OnWeaponReloadStart.AddDynamic(this, &ATDS123Character::WeaponReloadStart);
                     if (!myWeapon->OnWeaponReloadEnd.IsAlreadyBound(this, &ATDS123Character::WeaponReloadEnd))
                     myWeapon->OnWeaponReloadEnd.AddDynamic(this, &ATDS123Character::WeaponReloadEnd);
-
+                    if (!myWeapon->OnWeaponFireStart.IsAlreadyBound(this, &ATDS123Character::WeaponFireStart))
+                    myWeapon->OnWeaponFireStart.AddDynamic(this, &ATDS123Character::WeaponFireStart);
                     // after switch try reload weapon if needed
                     if (CurrentWeapon->GetWeaponRound() <= 0 && CurrentWeapon->CheckCanWeaponReload())
                         CurrentWeapon->InitReload();

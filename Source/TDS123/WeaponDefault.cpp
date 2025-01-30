@@ -186,11 +186,12 @@ inline void AWeaponDefault::Fire()
             DropShellTimer = WeaponSetting.ShellBullets.DropMeshTime;
         }
     }
-
     FireTimer = WeaponSetting.RateOfFire;
     AdditionalWeaponInfo.Round = AdditionalWeaponInfo.Round - 1;
     ChangeDispersionByShot();
 
+    OnWeaponFireStart.Broadcast(AnimFireChar);
+  
     UGameplayStatics::SpawnSoundAtLocation(GetWorld(), WeaponSetting.SoundFireWeapon, ShootLocation-> GetComponentLocation());
     UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponSetting.EffectFireWeapon, ShootLocation-> GetComponentTransform());
 
