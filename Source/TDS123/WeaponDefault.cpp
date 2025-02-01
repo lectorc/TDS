@@ -174,6 +174,12 @@ FProjectileInfo AWeaponDefault::GetProjectile()
 
 inline void AWeaponDefault::Fire()
 {
+    UAnimMontage* AnimToPlay = nullptr;
+    if (WeaponAiming)
+        AnimToPlay = WeaponSetting.AnimWeaponInfo.AnimCharFireAim;
+    else
+        AnimToPlay = WeaponSetting.AnimWeaponInfo.AnimCharFire;
+
     if (WeaponSetting.ShellBullets.DropMesh)
     {
         if (WeaponSetting.ShellBullets.DropMeshTime < 0.0f)
@@ -190,7 +196,7 @@ inline void AWeaponDefault::Fire()
     AdditionalWeaponInfo.Round = AdditionalWeaponInfo.Round - 1;
     ChangeDispersionByShot();
 
-    OnWeaponFireStart.Broadcast(AnimFireChar);
+    OnWeaponFireStart.Broadcast(AnimToPlay);
   
     UGameplayStatics::SpawnSoundAtLocation(GetWorld(), WeaponSetting.SoundFireWeapon, ShootLocation-> GetComponentLocation());
     UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponSetting.EffectFireWeapon, ShootLocation-> GetComponentTransform());

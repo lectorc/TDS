@@ -268,11 +268,11 @@ void ATDS123Character::WeaponReloadEnd(bool bIsSuccess, int32 AmmoTake)
     WeaponReloadEnd_BP(bIsSuccess);
 }
 
-void ATDS123Character::WeaponFireStart(UAnimMontage* AnimFireChar)
+void ATDS123Character::WeaponFireStart(UAnimMontage* Anim)
 {
     if (InventoryComponent && CurrentWeapon)
         InventoryComponent->SetAdditionalInfoWeapon(CurrentIndexWeapon, CurrentWeapon->AdditionalWeaponInfo);
-    WeaponFireStart_BP(AnimFireChar);
+    WeaponFireStart_BP(Anim);
 }
 
 void ATDS123Character::TrySwitchNextWeapon()

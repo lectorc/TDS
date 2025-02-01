@@ -149,9 +149,9 @@ public:
     void WeaponReloadStart_BP(UAnimMontage* Anim);
 
     UFUNCTION(BlueprintNativeEvent)
-    void WeaponFireStart(UAnimMontage* AnimFireChar);
+    void WeaponFireStart(UAnimMontage* Anim);
     UFUNCTION(BlueprintNativeEvent)
-    void WeaponFireStart_BP(UAnimMontage* AnimFireChar);
+    void WeaponFireStart_BP(UAnimMontage* Anim);
 
 
     void TrySwitchNextWeapon();

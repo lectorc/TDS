@@ -25,7 +25,7 @@ public:
 
     FOnWeaponReloadEnd OnWeaponReloadEnd;
     FOnWeaponReloadStart OnWeaponReloadStart;
-    FOnWeaponFireStart WeaponFireStart;
+    FOnWeaponFireStart OnWeaponFireStart;
 
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)
