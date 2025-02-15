@@ -65,8 +65,6 @@ public:
     FName GetWeaponNameBySlotIndex(int32 indexSlot);
     void SetAdditionalInfoWeapon(int32 IndexWeapon, FAdditionalWeaponInfo NewInfo);
 
-    UFUNCTION(BlueprintCallable)
-    void AmmoSlotChangeValue(EWeaponType TypeWeapon, int32 CoutChangeAmmo);
 
 
 
@@ -83,6 +81,8 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Interface")
     bool GetDropItemInfoFromInventory(int32 IndexSlot, FDropItem& DropItemInfo);
     UFUNCTION(BlueprintCallable, Category = "Interface")
-    void WeaponChangeAmmo(EWeaponType TypeWeapon, int32 AmmoTaken);
+    void AmmoSlotChangeValue(EWeaponType TypeWeapon, int32 AmmoTaken);
+
+    bool CheckAmmoForWeapon(int32 IndexWeapon);
     
 };

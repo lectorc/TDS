@@ -61,6 +61,8 @@ public:
 
     void WeaponInit();
 
+    FName CurrentWeaponIdName;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FireLogic")
     bool WeaponFiring = false;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FireLogic")
@@ -112,9 +114,9 @@ public:
     void InitReload();
     void FinishReload();
     void CancelReload();
+    int8 GetAviableAmmoForReload();
    
    
-
     bool BlockFire = false;
 
     //dispersion

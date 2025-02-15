@@ -6,6 +6,7 @@
 #include "Engine/StaticMeshActor.h"
 #include "TDS123/Character/TDS123InventoryComponent.h"
 
+
 // Sets default values
 AWeaponDefault::AWeaponDefault()
 {
@@ -66,7 +67,7 @@ void AWeaponDefault::FireTick(float DeltaTime)
     }
     else
     { 
-                if (!WeaponReloading)
+                if (!WeaponReloading && CheckCanWeaponReload())
                 {
                     InitReload();
                 }
@@ -154,6 +155,7 @@ bool AWeaponDefault::CheckCanWeaponReload()
     bool result = true;
     if (GetOwner())
     {
+        UE_LOG(LogTemp, Error, TEXT("AWeaponDefault::CheckCanWeaponReload - OwnerName - %s"), *GetOwner()->GetName());
         UTDS123InventoryComponent* MyInv = Cast<UTDS123InventoryComponent>(GetOwner()->GetComponentByClass(UTDS123InventoryComponent::StaticClass()));
         if (MyInv)
         {
@@ -467,10 +469,14 @@ void AWeaponDefault::InitReload()
 
 void AWeaponDefault::FinishReload()
 {
+
+    int8 AviableAmmoFromInventory = GetAviableAmmoForReload();
     WeaponReloading = false;
+    if (AviableAmmoFromInventory > WeaponSetting.MaxRound)
+        AviableAmmoFromInventory = WeaponSetting.MaxRound;
     int32 AmmoNeedTake = AdditionalWeaponInfo.Round;
-    AmmoNeedTake = AmmoNeedTake - WeaponSetting.MaxRound;
-    AdditionalWeaponInfo.Round = WeaponSetting.MaxRound;
+    AmmoNeedTake = AmmoNeedTake - AviableAmmoFromInventory;
+    AdditionalWeaponInfo.Round = AviableAmmoFromInventory;
         
     OnWeaponReloadEnd.Broadcast(true, AmmoNeedTake);
 }
@@ -541,4 +547,25 @@ void AWeaponDefault::CancelReload()
 
     OnWeaponReloadEnd.Broadcast(false, 0);
     DropClipFlag = false;
+}
+
+
+
+int8 AWeaponDefault::GetAviableAmmoForReload()
+{
+    int8 AviableAmmoForWeapon = WeaponSetting.MaxRound;
+    if (GetOwner())
+    {
+        UE_LOG(LogTemp, Error, TEXT("AWeaponDefault::GetAviableAmmoForReload - OwnerName - %s"), *GetOwner()->GetName());
+        UTDS123InventoryComponent* MyInv = Cast<UTDS123InventoryComponent>(GetOwner()->GetComponentByClass(UTDS123InventoryComponent::StaticClass()));
+        if (MyInv)
+        {
+            
+            if (MyInv->CheckAmmoForWeapon(WeaponSetting.WeaponType, AviableAmmoForWeapon))
+            {
+                AviableAmmoForWeapon = AviableAmmoForWeapon;
+            }
+        }
+    }
+    return AviableAmmoForWeapon;
 }

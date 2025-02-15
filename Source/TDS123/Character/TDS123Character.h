@@ -148,7 +148,7 @@ public:
     UFUNCTION(BlueprintNativeEvent)
     void WeaponReloadStart_BP(UAnimMontage* Anim);
 
-    UFUNCTION(BlueprintNativeEvent)
+    UFUNCTION()
     void WeaponFireStart(UAnimMontage* Anim);
     UFUNCTION(BlueprintNativeEvent)
     void WeaponFireStart_BP(UAnimMontage* Anim);

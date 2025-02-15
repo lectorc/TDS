@@ -216,7 +216,7 @@ bool UTDS123InventoryComponent::GetDropItemInfoFromInventory(int32 IndexSlot, FD
     return result;
 }
 
-void UTDS123InventoryComponent::WeaponChangeAmmo(EWeaponType TypeWeapon, int32 AmmoTaken)
+void UTDS123InventoryComponent::AmmoSlotChangeValue(EWeaponType TypeWeapon, int32 AmmoTaken)
 {
     bool bIsFind = false;
     int8 i = 0;
@@ -234,6 +234,11 @@ void UTDS123InventoryComponent::WeaponChangeAmmo(EWeaponType TypeWeapon, int32 A
         }
         i++;
     }
+}
+
+bool UTDS123InventoryComponent::CheckAmmoForWeapon(int32 IndexWeapon)
+{
+    return false;
 }
 
 FAdditionalWeaponInfo UTDS123InventoryComponent::GetAdditionalInfoWeapon(int32 IndexWeapon)
@@ -302,26 +307,6 @@ void UTDS123InventoryComponent::SetAdditionalInfoWeapon(int32 IndexWeapon, FAddi
     }
     else
         UE_LOG(LogTemp, Warning, TEXT("UTDS123InventoryComponent::SetAdditionalInfoWeapon - Not Correct index Weapon - %d"), IndexWeapon);
-}
-
-void UTDS123InventoryComponent::AmmoSlotChangeValue(EWeaponType TypeWeapon, int32 CoutChangeAmmo)
-{
-    bool bIsFind = false;
-    int8 i = 0;
-    while (i < AmmoSlots.Num() && !bIsFind)
-    {
-        if (AmmoSlots[i].WeaponType == TypeWeapon)
-        {
-            AmmoSlots[i].Cout += CoutChangeAmmo;
-            if (AmmoSlots[i].Cout > AmmoSlots[i].MaxCout)
-                AmmoSlots[i].Cout = AmmoSlots[i].MaxCout;
-
-            OnAmmoChange.Broadcast(AmmoSlots[i].WeaponType, AmmoSlots[i].Cout);
-
-            bIsFind = true;
-        }
-        i++;
-    }
 }
 
 

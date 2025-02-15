@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "TDS123/WeaponDefault.h"
 #include "Materials/Material.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -261,19 +262,22 @@ void ATDS123Character::WeaponReloadEnd(bool bIsSuccess, int32 AmmoTake)
 {
     if (InventoryComponent && CurrentWeapon)
     {
-        InventoryComponent->AmmoSlotChangeValue(CurrentWeapon->WeaponSetting.WeaponType, AmmoTake);
         InventoryComponent->SetAdditionalInfoWeapon(CurrentIndexWeapon, CurrentWeapon->AdditionalWeaponInfo);
-        InventoryComponent->WeaponChangeAmmo(CurrentWeapon->WeaponSetting.WeaponType, AmmoTake);
+        InventoryComponent->AmmoSlotChangeValue(CurrentWeapon->WeaponSetting.WeaponType, AmmoTake);
     }
     WeaponReloadEnd_BP(bIsSuccess);
 }
 
 void ATDS123Character::WeaponFireStart(UAnimMontage* Anim)
 {
-    if (InventoryComponent && CurrentWeapon)
-        InventoryComponent->SetAdditionalInfoWeapon(CurrentIndexWeapon, CurrentWeapon->AdditionalWeaponInfo);
     WeaponFireStart_BP(Anim);
 }
+
+void ATDS123Character::WeaponFireStart_BP_Implementation(UAnimMontage* Anim)
+{
+}
+
+
 
 void ATDS123Character::TrySwitchNextWeapon()
 {
@@ -427,7 +431,7 @@ void ATDS123Character::InitWeapon( FName IdWeaponName, FAdditionalWeaponInfo Wea
                     FAttachmentTransformRules Rule(EAttachmentRule::SnapToTarget, false);
                     myWeapon->AttachToComponent(GetMesh(), Rule, FName("WeaponSocketRightHand"));
                     CurrentWeapon = myWeapon;
-
+                    myWeapon->CurrentWeaponIdName = IdWeaponName;
                     myWeapon->WeaponSetting = myWeaponInfo;
 
                     //myWeapon->AdditionalWeaponInfo.Round = myWeaponInfo.MaxRound;
@@ -467,7 +471,7 @@ void ATDS123Character::TryReloadWeapon()
     if (CurrentWeapon)
     {
 
-        if (CurrentWeapon->GetWeaponRound() < CurrentWeapon->WeaponSetting.MaxRound)
+        if (CurrentWeapon->GetWeaponRound() < CurrentWeapon->WeaponSetting.MaxRound && CurrentWeapon->CheckCanWeaponReload())
         {
             CurrentWeapon->InitReload();
         }
