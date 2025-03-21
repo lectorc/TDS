@@ -269,6 +269,21 @@ struct FAmmoSlot
 };
 
 USTRUCT(BlueprintType)
+struct FDropWeapon : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    ///Index Slot by Index Array
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DropWeapon")
+    UStaticMesh* WeaponStaticMesh = nullptr;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DropWeapon")
+    USkeletalMesh* WeaponSkeletMesh = nullptr;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DropWeapon")
+    FWeaponSlot WeaponInfo;
+    
+};
+
+USTRUCT(BlueprintType)
 struct FDropItem : public FTableRowBase
 {
     GENERATED_BODY()

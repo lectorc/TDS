@@ -470,15 +470,23 @@ void AWeaponDefault::InitReload()
 void AWeaponDefault::FinishReload()
 {
 
+    int8 AmmoNeedTakeFromInv;
     int8 AviableAmmoFromInventory = GetAviableAmmoForReload();
+    int8 NeedToReload = WeaponSetting.MaxRound - AdditionalWeaponInfo.Round;
     WeaponReloading = false;
-    if (AviableAmmoFromInventory > WeaponSetting.MaxRound)
-        AviableAmmoFromInventory = WeaponSetting.MaxRound;
-    int32 AmmoNeedTake = AdditionalWeaponInfo.Round;
-    AmmoNeedTake = AmmoNeedTake - AviableAmmoFromInventory;
-    AdditionalWeaponInfo.Round = AviableAmmoFromInventory;
-        
-    OnWeaponReloadEnd.Broadcast(true, AmmoNeedTake);
+
+    if (NeedToReload > AviableAmmoFromInventory)
+    {
+        AdditionalWeaponInfo.Round = AviableAmmoFromInventory;
+        AmmoNeedTakeFromInv = AviableAmmoFromInventory;
+
+    }
+    else
+    {
+        AdditionalWeaponInfo.Round += NeedToReload;
+        AmmoNeedTakeFromInv = NeedToReload;
+    }
+    OnWeaponReloadEnd.Broadcast(true, -AmmoNeedTakeFromInv);
 }
 
 void AWeaponDefault::InitDropMesh(UStaticMesh* DropMesh, FTransform Offset, FVector DropImpulseDirection, float LifeTimeMesh, float ImpulseRandomDispersion, float PowerImpulse, float CustomMass)

@@ -56,7 +56,7 @@ public:
     TArray<FWeaponSlot> WeaponSlots;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapons")
     TArray<FAmmoSlot> AmmoSlots;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+    
     int32 MaxSlotsWeapon = 0;
 
 
@@ -73,8 +73,7 @@ public:
     bool CheckCanTakeAmmo(EWeaponType AmmoType);
     UFUNCTION(BlueprintCallable, Category = "Interface")
     bool CheckCanTakeWeapon(int32& FreeSlot);
-    UFUNCTION(BlueprintCallable, Category = "Interface")
-    bool SwitchWeaponToInventory(FWeaponSlot NewWeapon, int32 IndexSlot, int32 CurrentIndexWeaponChar, FDropItem& DropItemInfo);
+ 
     UFUNCTION(BlueprintCallable, Category = "Interface")
     bool TryGetWeaponToInventory(FWeaponSlot NewWeapon);
 
@@ -84,5 +83,15 @@ public:
     void AmmoSlotChangeValue(EWeaponType TypeWeapon, int32 AmmoTaken);
 
     bool CheckAmmoForWeapon(int32 IndexWeapon);
+   
+    UFUNCTION(BlueprintCallable, Category = "Interface")
+    void SaveItemToInventory();
+
+  
     
+    UFUNCTION(BlueprintCallable, Category = "Interface")
+    void SwitchWeaponToInventory(FWeaponSlot NewWeapon, int32 IndexSlot, int32 CurrentIndexWeaponChar);
+
+    UFUNCTION(BlueprintCallable, Category = "Interface")
+    bool DropWeaponFromInventory(int32 IndexSlot);
 };
