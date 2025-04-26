@@ -78,8 +78,6 @@ public:
     bool TryGetWeaponToInventory(FWeaponSlot NewWeapon);
 
     UFUNCTION(BlueprintCallable, Category = "Interface")
-    bool GetDropItemInfoFromInventory(int32 IndexSlot, FDropItem& DropItemInfo);
-    UFUNCTION(BlueprintCallable, Category = "Interface")
     void AmmoSlotChangeValue(EWeaponType TypeWeapon, int32 AmmoTaken);
 
     bool CheckAmmoForWeapon(int32 IndexWeapon);
@@ -90,8 +88,8 @@ public:
   
     
     UFUNCTION(BlueprintCallable, Category = "Interface")
-    void SwitchWeaponToInventory(FWeaponSlot NewWeapon, int32 IndexSlot, int32 CurrentIndexWeaponChar);
+    bool SwitchWeaponToInventory(FWeaponSlot NewWeapon, int32 IndexSlot, int32 CurrentIndexWeaponChar, FDropItem &DropItemInfo);
 
     UFUNCTION(BlueprintCallable, Category = "Interface")
-    bool DropWeaponFromInventory(int32 IndexSlot);
+    bool GetDropItemInfoFromInventory(int32 IndexSlot, FDropItem& DropItemInfo);
 };

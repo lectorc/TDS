@@ -470,24 +470,6 @@ bool UTDS123InventoryComponent::TryGetWeaponToInventory(FWeaponSlot NewWeapon)
 	return false;
 }
 
-bool UTDS123InventoryComponent::GetDropItemInfoFromInventory(int32 IndexSlot, FDropItem& DropItemInfo)
-{
-    bool result = false;
-
-    FName DropItemName = GetWeaponNameBySlotIndex(IndexSlot);
-
-    UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetWorld()->GetGameInstance());
-    if (myGI)
-    {
-        result = myGI->GetDropItemInfoByName(DropItemName, DropItemInfo);
-        if (WeaponSlots.IsValidIndex(IndexSlot))
-        {
-            DropItemInfo.WeaponInfo.AdditionalInfo = WeaponSlots[IndexSlot].AdditionalInfo;
-        }
-    }
-
-    return result;
-}
 
 void UTDS123InventoryComponent::AmmoSlotChangeValue(EWeaponType TypeWeapon, int32 CoutChangeAmmo)
 {
@@ -520,18 +502,35 @@ void UTDS123InventoryComponent::SaveItemToInventory()
 {
 }
 
-void UTDS123InventoryComponent::SwitchWeaponToInventory(FWeaponSlot NewWeapon, int32 IndexSlot, int32 CurrentIndexWeaponChar)
+bool UTDS123InventoryComponent::SwitchWeaponToInventory(FWeaponSlot NewWeapon, int32 IndexSlot, int32 CurrentIndexWeaponChar, FDropItem& DropItemInfo)
 {
-	if (WeaponSlots.IsValidIndex(IndexSlot) && DropWeaponFromInventory(IndexSlot))
+	bool result = false;
+	if (WeaponSlots.IsValidIndex(IndexSlot) && GetDropItemInfoFromInventory(IndexSlot, DropItemInfo))
 	{
 		WeaponSlots[IndexSlot] = NewWeapon;
-		SwitchWeaponToIndex(CurrentIndexWeaponChar, CurrentIndexWeaponChar, NewWeapon.AdditionalInfo, true);
-		
+		SwitchWeaponToIndex(CurrentIndexWeaponChar, -1, NewWeapon.AdditionalInfo, true);
+		OnUpdateWeaponSlots.Broadcast(IndexSlot, NewWeapon);
+		result = true;
 	}
+	return result;
 }
 
-bool UTDS123InventoryComponent::DropWeaponFromInventory(int32 IndexSlot)
+bool UTDS123InventoryComponent::GetDropItemInfoFromInventory(int32 IndexSlot, FDropItem& DropItemInfo)
 {
+	bool result = false;
+	FName DropItemName = GetWeaponNameBySlotIndex(IndexSlot);
+   
+	UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetWorld()->GetGameInstance());
+	if (myGI)
+	{
+		 result = myGI->GetDropItemInfoByName(DropItemName, DropItemInfo);
+		 if (WeaponSlots.IsValidIndex(IndexSlot))
+		 {
+			 DropItemInfo.WeaponInfo.AdditionalInfo = WeaponSlots[IndexSlot].AdditionalInfo;
+		 }
+		 
+	}
+
 	return true;
 }
 
