@@ -75,8 +75,7 @@ void ATDS123Character::Tick(float DeltaSeconds)
 
     StaminaSystem();
 
-    if (InventoryComponent && CurrentWeapon)
-        InventoryComponent->SetAdditionalInfoWeapon(CurrentIndexWeapon, CurrentWeapon->AdditionalWeaponInfo);
+    
 }
 
 
