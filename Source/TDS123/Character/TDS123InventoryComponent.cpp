@@ -71,6 +71,8 @@ bool UTDS123InventoryComponent::SwitchWeaponToIndex(int32 ChangeToIndex, int32 O
 	else
 		if (ChangeToIndex < 0)
 			CorrectIndex = WeaponSlots.Num() - 1;
+	
+	
 
 	FName NewIdWeapon;
 	FAdditionalWeaponInfo NewAdditionalInfo;
