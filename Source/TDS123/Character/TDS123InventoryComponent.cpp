@@ -502,6 +502,7 @@ void UTDS123InventoryComponent::SaveItemToInventory()
 {
 }
 
+
 bool UTDS123InventoryComponent::SwitchWeaponToInventory(FWeaponSlot NewWeapon, int32 IndexSlot, int32 CurrentIndexWeaponChar, FDropItem& DropItemInfo)
 {
 	bool result = false;

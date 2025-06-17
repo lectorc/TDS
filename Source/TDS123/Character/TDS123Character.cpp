@@ -60,7 +60,8 @@ ATDS123Character::ATDS123Character()
 void ATDS123Character::BeginPlay()
 {
     Super::BeginPlay();
-
+    if (InventoryComponent && CurrentWeapon)
+        InventoryComponent->SetAdditionalInfoWeapon(CurrentIndexWeapon, CurrentWeapon->AdditionalWeaponInfo);
 
 }
 
@@ -74,6 +75,8 @@ void ATDS123Character::Tick(float DeltaSeconds)
 
     StaminaSystem();
 
+    if (InventoryComponent && CurrentWeapon)
+        InventoryComponent->SetAdditionalInfoWeapon(CurrentIndexWeapon, CurrentWeapon->AdditionalWeaponInfo);
 }
 
 
@@ -270,6 +273,8 @@ void ATDS123Character::WeaponReloadEnd(bool bIsSuccess, int32 AmmoTake)
 
 void ATDS123Character::WeaponFireStart(UAnimMontage* Anim)
 {
+    if (InventoryComponent && CurrentWeapon)
+        InventoryComponent->SetAdditionalInfoWeapon(CurrentIndexWeapon, CurrentWeapon->AdditionalWeaponInfo);
     WeaponFireStart_BP(Anim);
 }
 
