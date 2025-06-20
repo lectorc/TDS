@@ -62,7 +62,7 @@ public:
 
     FAdditionalWeaponInfo GetAdditionalInfoWeapon(int32 IndexWeapon);
     int32 GetWeaponIndexSlotByName(FName IdWeaponName);
-    FName GetWeaponNameBySlotIndex(int32 indexSlot);
+    
     void SetAdditionalInfoWeapon(int32 IndexWeapon, FAdditionalWeaponInfo NewInfo);
 
 
@@ -85,8 +85,8 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Interface")
     void SaveItemToInventory();
   
-
-  
+    UFUNCTION(BlueprintCallable)
+    FName GetWeaponNameBySlotIndex(int32 indexSlot);
     
     UFUNCTION(BlueprintCallable, Category = "Interface")
     bool SwitchWeaponToInventory(FWeaponSlot NewWeapon, int32 IndexSlot, int32 CurrentIndexWeaponChar, FDropItem &DropItemInfo);
