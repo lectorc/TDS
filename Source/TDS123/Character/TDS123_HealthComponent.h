@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "TDS123_HealthComponent.generated.h"
 
-//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChange, float, Health);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChange, float, Health, float, Damage);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDead);
 
 
@@ -25,8 +25,8 @@ class TDS123_API UTDS123_HealthComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	//UPROPERTY(BlueprintAssignable, EditAnywhere, BlueprintReadWrite, Category = "Health ")
-	//FOnHealthChange OnHealthChange;
+	UPROPERTY(BlueprintAssignable, EditAnywhere, BlueprintReadWrite, Category = "Health ")
+	FOnHealthChange OnHealthChange;
 
 	UPROPERTY(BlueprintAssignable, EditAnywhere, BlueprintReadWrite, Category = "Health ")
 	FOnDead OnDead;
@@ -42,7 +42,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	float GetCurrentHealth();
 	UFUNCTION(BlueprintCallable, Category = "Health")
-	void ReceiveDamage(float Damage);
+	virtual void ReceiveDamage(float Damage);
 	UFUNCTION(BlueprintNativeEvent)
 	void DeadEvent();
 

@@ -40,11 +40,12 @@ float UTDS123_HealthComponent::GetCurrentHealth()
 void UTDS123_HealthComponent::ReceiveDamage(float Damage)
 {
 	Health -= Damage;
+	OnHealthChange.Broadcast(Health, Damage);
 	if (Health < 0.0f)
 	{
 		DeadEvent();
 	}
-	//OnHealthChange.Broadcast(Health);
+	
 }
 
 void UTDS123_HealthComponent::DeadEvent_Implementation()
