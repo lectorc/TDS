@@ -24,37 +24,54 @@ FName UTDS123InventoryComponent::GetWeaponNameBySlotIndex(int32 indexSlot)
 // Called when the game starts or when spawned
 void UTDS123InventoryComponent::BeginPlay()
 {
-    Super::BeginPlay();
+		Super::BeginPlay();
+
 	
-    for (int8 i = 0; i < WeaponSlots.Num(); i++)
-    {
-        UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetWorld()->GetGameInstance());
-        if (myGI)
-      {
-            if (!WeaponSlots[i].NameItem.IsNone())
-            {
-               FWeaponInfo Info;
-               if (myGI->GetWeaponInfoByName(WeaponSlots[i].NameItem, Info))
-                    WeaponSlots[i].AdditionalInfo.Round = Info.MaxRound;
-               else
-               {
-                    //WeaponSlots.RemoveAt(i);
-                    //i--;
-                }
-          }
-       }
-    }
+	for (int8 i = 0; i < WeaponSlots.Num(); i++)
+	{
+		UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetWorld()->GetGameInstance());
+		if (myGI)
+		{
+			if (!WeaponSlots[i].NameItem.IsNone())
+			{
+				FWeaponInfo Info;
+				if (myGI->GetWeaponInfoByName(WeaponSlots[i].NameItem, Info))
+					WeaponSlots[i].AdditionalInfo.Round = Info.MaxRound;
+				else
+				{
+					//WeaponSlots.RemoveAt(i);
+					//i--;
+				}
+			}
+		}
+	}
 
-    MaxSlotsWeapon = WeaponSlots.Num();
+	MaxSlotsWeapon = WeaponSlots.Num();
 
-    if (WeaponSlots.IsValidIndex(0))
-    {
-        if (!WeaponSlots[0].NameItem.IsNone())
-            OnSwitchWeapon.Broadcast(WeaponSlots[0].NameItem, WeaponSlots[0].AdditionalInfo, 0);
-    }
+	if (WeaponSlots.IsValidIndex(0))
+	{
+		if (!WeaponSlots[0].NameItem.IsNone())
+			OnSwitchWeapon.Broadcast(WeaponSlots[0].NameItem, WeaponSlots[0].AdditionalInfo, 0);
+	}
+	if (WeaponSlots.IsValidIndex(1))
+	{
+		if (!WeaponSlots[1].NameItem.IsNone())
+		{
+
+			OnWeaponAdditionalInfoChange.Broadcast(1, WeaponSlots[1].AdditionalInfo);
+		}	
+	}
+	if (WeaponSlots.IsValidIndex(2))
+	{
+		if (!WeaponSlots[2].NameItem.IsNone())
+		{
+			OnWeaponAdditionalInfoChange.Broadcast(2, WeaponSlots[2].AdditionalInfo);
+		}
+	}
+
+
 	
 }
-
 
 
 void UTDS123InventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -516,6 +533,7 @@ bool UTDS123InventoryComponent::SwitchWeaponToInventory(FWeaponSlot NewWeapon, i
 		WeaponSlots[IndexSlot] = NewWeapon;
 		SwitchWeaponToIndex(CurrentIndexWeaponChar, -1, NewWeapon.AdditionalInfo, true);
 		OnUpdateWeaponSlots.Broadcast(IndexSlot, NewWeapon);
+		OnWeaponAdditionalInfoChange.Broadcast(IndexSlot, NewWeapon.AdditionalInfo);
 		result = true;
 	}
 	return result;
