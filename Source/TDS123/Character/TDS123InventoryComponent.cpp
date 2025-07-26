@@ -476,11 +476,11 @@ bool UTDS123InventoryComponent::TryGetWeaponToInventory(FWeaponSlot NewWeapon)
 	int32 IndexSlot = -1;
 	if (CheckCanTakeWeapon(IndexSlot))
 	{
-		if(WeaponSlots.IsValidIndex(IndexSlot))
-		{ 
-		
+		if (WeaponSlots.IsValidIndex(IndexSlot))
+		{
+
 			WeaponSlots[IndexSlot] = NewWeapon;
-			
+
 			OnUpdateWeaponSlots.Broadcast(IndexSlot, NewWeapon);
 			return true;
 		}
