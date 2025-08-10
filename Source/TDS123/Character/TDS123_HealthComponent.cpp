@@ -37,18 +37,26 @@ float UTDS123_HealthComponent::GetCurrentHealth()
 	return Health;
 }
 
-void UTDS123_HealthComponent::ReceiveDamage(float Damage)
+void UTDS123_HealthComponent::ChangeCurrentHealth(float ChangeValue)
 {
-	Health -= Damage;
-	OnHealthChange.Broadcast(Health, Damage);
-	if (Health < 0.0f)
+	Health += ChangeValue;
+	OnHealthChange.Broadcast(Health, ChangeValue);
+	if (Health > 100.0f)
 	{
-		DeadEvent();
+		Health = 100.0f;
 	}
-	
+	else
+	{
+		if (Health < 0.0f)
+		{
+			OnDead.Broadcast();
+		}
+	}
 }
 
-void UTDS123_HealthComponent::DeadEvent_Implementation()
+void UTDS123_HealthComponent::SetCurrentHealth(float NewHealth)
 {
+	Health = NewHealth;
 }
+
 

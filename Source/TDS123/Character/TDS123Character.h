@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "TDS123/FuncLibrary/UType.h"
 #include "TDS123/WeaponDefault.h"
+#include "TDS123/Game/TDS123PlayerController.h"
+#include "TDS123/Character/TDS123CharacterHealthComponent.h"
     
 #include "TDS123Character.generated.h"
 
@@ -16,6 +18,8 @@ class ATDS123Character : public ACharacter
 
 public:
 	ATDS123Character();
+
+    FTimerHandle TimerHandle_RagDollTimer;
 
 	// Called every frame.
 	virtual void Tick(float DeltaSeconds) override;
@@ -33,7 +37,8 @@ public:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
     class UTDS123InventoryComponent* InventoryComponent;
-    
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+    class UTDS123CharacterHealthComponent* CharHealthComponent;
 
 private:
 	/** Top down camera */
@@ -111,6 +116,11 @@ public:
         bool WalkEnabled = false;
         UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
         bool AimEnabled = false;
+        UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+        bool bIsAlive = true;
+        UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+        TArray<UAnimMontage*> DeadsAnim;
+
 
     UFUNCTION(BlueprintCallable)
         void ChangeMovementStateToSprint();
@@ -160,6 +170,12 @@ public:
     UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
     int32 CurrentIndexWeapon = 0;
 
+    virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+    UFUNCTION(BlueprintCallable)
+    void CharDead();
+   
+    void EnableRagdoll();
 
 };
 

@@ -123,3 +123,7 @@ void ATDS123PlayerController::OnTouchReleased()
 	bIsTouch = false;
 	OnSetDestinationReleased();
 }
+
+void ATDS123PlayerController::PawnDead()
+{
+}

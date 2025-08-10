@@ -14,6 +14,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "TDS123/Character/TDS123InventoryComponent.h"
+#include "TDS123/Character/TDS123_HealthComponent.h"
 #include "Engine/World.h"
 
 ATDS123Character::ATDS123Character()
@@ -46,6 +47,12 @@ ATDS123Character::ATDS123Character()
 	TopDownCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
     InventoryComponent = CreateDefaultSubobject<UTDS123InventoryComponent>(TEXT("InventoryComponent"));
+    CharHealthComponent = CreateDefaultSubobject<UTDS123CharacterHealthComponent>(TEXT("HealthComponent"));
+
+    if (CharHealthComponent)
+    {
+        CharHealthComponent->OnDead.AddDynamic(this, &ATDS123Character::CharDead);
+    }
 
     if (InventoryComponent)
     {
@@ -328,6 +335,34 @@ void ATDS123Character::TrySwitchPreviosWeapon()
             }
         }
     }
+}
+
+float ATDS123Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+    float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+    CharHealthComponent->ChangeCurrentHealth(-DamageAmount);
+    return ActualDamage;
+}
+
+void ATDS123Character::CharDead()
+{
+    float TimeAnim = 0.0f;
+    int32 rnd = FMath::RandHelper(DeadsAnim.Num());
+    if (DeadsAnim.IsValidIndex(rnd) && DeadsAnim[rnd] && GetMesh() && GetMesh()->GetAnimInstance())
+    {
+        TimeAnim = DeadsAnim[rnd]->GetPlayLength();
+        GetMesh()->GetAnimInstance()->Montage_Play(DeadsAnim[rnd]);
+    }
+   
+    UnPossessed();
+
+    //Timer Ragdoll
+    GetWorldTimerManager().SetTimer(TimerHandle_RagDollTimer,this, &ATDS123Character::EnableRagdoll, TimeAnim, false);
+}
+
+void ATDS123Character::EnableRagdoll()
+{
+    UE_LOG(LogTemp, Error, TEXT("ATDS123Character::EnableRagdoll INIT"));
 }
 
 void ATDS123Character::WeaponReloadStart_BP_Implementation(UAnimMontage* Anim)

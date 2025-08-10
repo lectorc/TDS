@@ -42,9 +42,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	float GetCurrentHealth();
 	UFUNCTION(BlueprintCallable, Category = "Health")
-	virtual void ReceiveDamage(float Damage);
-	UFUNCTION(BlueprintNativeEvent)
-	void DeadEvent();
+	virtual void ChangeCurrentHealth(float ChangeValue);
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	void SetCurrentHealth(float NewHealth);
 
 		
 };

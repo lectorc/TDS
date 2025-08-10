@@ -4,9 +4,9 @@
 #include "TDS123/Character/TDS123CharacterHealthComponent.h"
 #include "TDS123CharacterHealthComponent.h"
 
-void UTDS123CharacterHealthComponent::ReceiveDamage(float Damage)
+void UTDS123CharacterHealthComponent::ChangeCurrentHealth(float ChangeValue)
 {
-	Super::ReceiveDamage(Damage);
+	Super::ChangeCurrentHealth(ChangeValue);
 
 	//for char
 }
