@@ -24,3 +24,7 @@ ATDS123GameMode::ATDS123GameMode()
 		PlayerControllerClass = PlayerControllerBPClass.Class;
 	}
 }
+
+void ATDS123GameMode::PlayerCharacterDead()
+{
+}

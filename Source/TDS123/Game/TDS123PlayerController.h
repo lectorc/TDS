@@ -60,6 +60,8 @@ protected:
 	
 	void PawnDead();
 
+	
+
 private:
 	FVector CachedDestination;
 
