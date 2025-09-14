@@ -37,8 +37,10 @@ float UTDS123_HealthComponent::GetCurrentHealth()
 	return Health;
 }
 
-void UTDS123_HealthComponent::ChangeCurrentHealth(float ChangeValue)
+void UTDS123_HealthComponent::ChangeHealthValue(float ChangeValue)
 {
+	ChangeValue = ChangeValue * CoefDamage;
+
 	Health += ChangeValue;
 	OnHealthChange.Broadcast(Health, ChangeValue);
 	if (Health > 100.0f)

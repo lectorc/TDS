@@ -344,7 +344,7 @@ float ATDS123Character::TakeDamage(float DamageAmount, FDamageEvent const& Damag
     float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
     if (bIsAlive)
     {
-        CharHealthComponent->ChangeCurrentHealth(-DamageAmount);
+        CharHealthComponent->ChangeHealthValue(-DamageAmount);
        
     }
     return ActualDamage;

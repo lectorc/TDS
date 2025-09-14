@@ -38,11 +38,13 @@ protected:
 public:	
 	UTDS123_HealthComponent();
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float CoefDamage = 1.0f;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	float GetCurrentHealth();
 	UFUNCTION(BlueprintCallable, Category = "Health")
-	virtual void ChangeCurrentHealth(float ChangeValue);
+	virtual void ChangeHealthValue(float ChangeValue);
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	void SetCurrentHealth(float NewHealth);
 
