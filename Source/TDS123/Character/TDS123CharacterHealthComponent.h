@@ -27,14 +27,11 @@ public:
 
 protected:
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shield")
-    float Shield = 400.0f;
+  
+    float Shield = 100.0f;
 
 public:
 
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shield")
-    float ShieldRecover = 10.0f;
 
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shield")

@@ -547,7 +547,7 @@ bool UTDS123InventoryComponent::GetDropItemInfoFromInventory(int32 IndexSlot, FD
 	UTDS123GameInstance* myGI = Cast<UTDS123GameInstance>(GetWorld()->GetGameInstance());
 	if (myGI)
 	{
-		 result = myGI->GetDropItemInfoByName(DropItemName, DropItemInfo);
+		 result = myGI->GetDropItemInfoByWeaponName(DropItemName, DropItemInfo);
 		 if (WeaponSlots.IsValidIndex(IndexSlot))
 		 {
 			 DropItemInfo.WeaponInfo.AdditionalInfo = WeaponSlots[IndexSlot].AdditionalInfo;

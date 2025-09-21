@@ -42,7 +42,6 @@ void UTDS123_HealthComponent::ChangeHealthValue(float ChangeValue)
 	ChangeValue = ChangeValue * CoefDamage;
 
 	Health += ChangeValue;
-	OnHealthChange.Broadcast(Health, ChangeValue);
 	if (Health > 100.0f)
 	{
 		Health = 100.0f;
@@ -54,6 +53,8 @@ void UTDS123_HealthComponent::ChangeHealthValue(float ChangeValue)
 			OnDead.Broadcast();
 		}
 	}
+
+	OnHealthChange.Broadcast(Health, ChangeValue);
 }
 
 void UTDS123_HealthComponent::SetCurrentHealth(float NewHealth)

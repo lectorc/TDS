@@ -282,6 +282,10 @@ struct FDropItem : public FTableRowBase
     USkeletalMesh* WeaponSkeletMesh = nullptr;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DropWeapon")
     FWeaponSlot WeaponInfo;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DropWeapon")
+    UNiagaraSystem* ParticleItem = nullptr;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DropWeapon")
+    FTransform Offset;
 };
 
 UCLASS()

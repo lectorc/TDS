@@ -23,7 +23,7 @@ bool UTDS123GameInstance::GetWeaponInfoByName(FName NameWeapon, FWeaponInfo& Out
     return bIsFind;
 }
 
-bool UTDS123GameInstance::GetDropItemInfoByName(FName NameItem, FDropItem& OutInfo)
+bool UTDS123GameInstance::GetDropItemInfoByWeaponName(FName NameItem, FDropItem& OutInfo)
 {
     bool bIsFind = false;
 
@@ -47,6 +47,28 @@ bool UTDS123GameInstance::GetDropItemInfoByName(FName NameItem, FDropItem& OutIn
     else
     {
         UE_LOG(LogTemp, Warning, TEXT("UTPSGameInstance::GetDropItemInfoByName - DropItemInfoTable -NULL"));
+    }
+
+    return bIsFind;
+}
+
+bool UTDS123GameInstance::GetDropItemInfoByName(FName NameItem, FDropItem& OutInfo)
+{
+    bool bIsFind = false;
+    FDropItem* DropItemInfoRow;
+
+    if (DropItemInfoTable)
+    {
+        DropItemInfoRow = DropItemInfoTable->FindRow<FDropItem>(NameItem, "", false);
+        if (DropItemInfoRow)
+        {
+            bIsFind = true;
+            OutInfo = *DropItemInfoRow;
+        }
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("UTPSGameInstance::GetWeaponInfoByName - DropItemInfoTable -NULL"))
     }
 
     return bIsFind;

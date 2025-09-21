@@ -10,7 +10,7 @@ void UTDS123CharacterHealthComponent::ChangeHealthValue(float ChangeValue)
 	
 	float CurrentDamage = ChangeValue * CoefDamage;
 
-	if (Shield > 0.0f)
+	if (Shield > 0.0f && (ChangeValue < 0.0f))
 	{
 		ChangeShieldValue(ChangeValue);
 		
@@ -36,7 +36,7 @@ void UTDS123CharacterHealthComponent::ChangeShieldValue(float ChangeValue)
 	
 	Shield += ChangeValue;
 
-	OnShieldChange.Broadcast(Shield, ChangeValue);
+	
 
 	if (Shield > 100.0f)
 	{
@@ -48,19 +48,21 @@ void UTDS123CharacterHealthComponent::ChangeShieldValue(float ChangeValue)
 			Shield = 0.0f;
 	}
 
-	if (GetWorld() && GetWorld()->TimerManager)
+	if (GetWorld())
 	{
-		GetWorld()->TimerManager->SetTimer(TimerHandle_CollDownShieldTimer, this, &UTDS123CharacterHealthComponent::CoolDownShieldEnd, CoolDownShieldRecoveryTime, false);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle_CollDownShieldTimer, this, &UTDS123CharacterHealthComponent::CoolDownShieldEnd, CoolDownShieldRecoveryTime, false);
 
-		GetWorld()->TimeManager->ClearTimer(TimerHandle_ShieldRecoveryRateTimer);
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle_ShieldRecoveryRateTimer);
 	}
+
+	OnShieldChange.Broadcast(Shield, ChangeValue);
 }
 
 void UTDS123CharacterHealthComponent::CoolDownShieldEnd()
 {
-	if (GetWorld() && GetWorld()->TimerManager)
+	if (GetWorld())
 	{
-		GetWorld()->TimerManager->SetTimer(TimerHandle_ShieldRecoveryRateTimer, this, &UTDS123CharacterHealthComponent::RecoveryShield, ShieldRecoverRate, true);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle_ShieldRecoveryRateTimer, this, &UTDS123CharacterHealthComponent::RecoveryShield, ShieldRecoverRate, true);
 	}
 
 
@@ -73,9 +75,9 @@ void UTDS123CharacterHealthComponent::RecoveryShield()
 	if (tmp > 100.0f)
 	{
 		Shield = 100.0f;
-		if (GetWorld() && GetWorld()->TimerManager)
+		if (GetWorld())
 		{
-			GetWorld()->TimerManager->ClearTimer(TimerHandle_ShieldRecoveryRateTimer);
+			GetWorld()->GetTimerManager().ClearTimer(TimerHandle_ShieldRecoveryRateTimer);
 		}
 	}
 	else
@@ -83,5 +85,5 @@ void UTDS123CharacterHealthComponent::RecoveryShield()
 		Shield = tmp;
 	}
 
-
+	OnShieldChange.Broadcast(Shield, ShieldRecoverValue);
 }
