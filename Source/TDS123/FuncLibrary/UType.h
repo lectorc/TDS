@@ -4,7 +4,10 @@
 
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Engine/DataTable.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
 #include "UType.generated.h"
+
 
 UENUM(BlueprintType)
 enum class EMovementState : uint8
@@ -283,7 +286,7 @@ struct FDropItem : public FTableRowBase
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DropWeapon")
     FWeaponSlot WeaponInfo;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DropWeapon")
-    UNiagaraSystem* ParticleItem = nullptr;
+    UNiagaraSystem* ParticleItem;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DropWeapon")
     FTransform Offset;
 };
