@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/StaticMeshActor.h"
 #include "TDS123/Character/TDS123InventoryComponent.h"
+#include "TDS123/StateEffect.h"
 
 
 // Sets default values
@@ -276,11 +277,15 @@ inline void AWeaponDefault::Fire()
                     {
                         UGameplayStatics::PlaySoundAtLocation(GetWorld(), WeaponSetting.ProjectileSetting.HitSound, Hit.ImpactPoint);
                     }
+                    UStateEffect* NewEffect = NewObject<UStateEffect>(Hit.GetActor(), FName("Effect"));
+
                     UGameplayStatics::ApplyDamage(Hit.GetActor(), WeaponSetting.ProjectileSetting.ProjectileDamage, GetInstigatorController(), this, NULL);
                 }
             }
           }
         }
+
+
     if (GetWeaponRound() <= 0 && !WeaponReloading)
     {
         //Init Reload
