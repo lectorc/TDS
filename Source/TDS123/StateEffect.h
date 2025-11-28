@@ -4,19 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "TDS123/StateEffect.h"
 #include "StateEffect.generated.h"
 
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class TDS123_API UStateEffect : public UObject
 {
 	GENERATED_BODY()
+
 public:
-	virtual bool InitObject(APawn* Pawn);
-	virtual void ExecuteEffect(float DeltaTime);
+
+	virtual bool InitObject();
 	virtual void DestroyObject();
 
+};
+UCLASS()
+class TDS123_API UTDS123_StateEffect_ExecuteOnce : public UStateEffect
+{
+	GENERATED_BODY()
+
+public:
+	bool InitObject() override;
+	void DestroyObject() override;
 };

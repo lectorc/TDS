@@ -8,11 +8,12 @@
 #include "TDS123/WeaponDefault.h"
 #include "TDS123/Game/TDS123PlayerController.h"
 #include "TDS123/Character/TDS123CharacterHealthComponent.h"
+#include "TDS123/Interface/IGame_Actor.h"
     
 #include "TDS123Character.generated.h"
 
 UCLASS(Blueprintable)
-class ATDS123Character : public ACharacter
+class ATDS123Character : public ACharacter, public IIGame_Actor
 {
 	GENERATED_BODY()
 
@@ -169,6 +170,10 @@ public:
 
     UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
     int32 CurrentIndexWeapon = 0;
+
+   
+
+
 
     virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 

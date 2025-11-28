@@ -3,15 +3,21 @@
 
 #include "StateEffect.h"
 
-bool UStateEffect::InitObject(APawn* Pawn)
+bool UStateEffect::InitObject()
 {
 	return true;
 }
 
-void UStateEffect::ExecuteEffect(float DeltaTime)
+void UStateEffect::DestroyObject()
 {
 }
 
-void UStateEffect::DestroyObject()
+bool UTDS123_StateEffect_ExecuteOnce::InitObject()
 {
+	Super::InitObject();
+}
+
+void UTDS123_StateEffect_ExecuteOnce::DestroyObject()
+{
+	Super::DestroyObject();
 }
