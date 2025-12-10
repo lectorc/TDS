@@ -341,6 +341,12 @@ void ATDS123Character::TrySwitchPreviosWeapon()
 
 
 
+bool ATDS123Character::AviableForEffects_Implementation()
+{
+    UE_LOG(LogTemp, Warning, TEXT("ATDS123Character::AviableForEffects_Implementation"));
+    return true;
+}
+
 float ATDS123Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
     float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);

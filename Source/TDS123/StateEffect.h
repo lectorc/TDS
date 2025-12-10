@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "PhysicalMaterials/PhysicalMaterial.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "StateEffect.generated.h"
 
 /**
@@ -16,16 +18,53 @@ class TDS123_API UStateEffect : public UObject
 
 public:
 
-	virtual bool InitObject();
+	virtual bool InitObject(AActor* Actor);
 	virtual void DestroyObject();
 
+	AActor* myActor = nullptr;
 };
+
+
 UCLASS()
 class TDS123_API UTDS123_StateEffect_ExecuteOnce : public UStateEffect
 {
 	GENERATED_BODY()
 
 public:
-	bool InitObject() override;
+	bool InitObject(AActor* Actor) override;
 	void DestroyObject() override;
+
+	virtual void ExecuteOnce();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setting Execute Once")
+	float Power = 20.0f;
+};
+
+
+
+UCLASS()
+class TDS123_API UTDS123_StateEffect_ExecuteTimer : public UStateEffect
+{
+	GENERATED_BODY()
+
+public:
+	bool InitObject(AActor* Actor) override;
+	void DestroyObject() override;
+
+	virtual void Execute();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setting Execute Once")
+		float Power = 20.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setting Execute Once")
+		float Timer = 5.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setting Execute Once")
+		float RateTime = 1.0f;
+
+		FTimerHandle TimerHandle_ExecuteTimer;
+		FTimerHandle TimerHandle_EffectTimer;
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setting Execute Once")
+		UParticleSystem* ParticleEffect = nullptr;
+
+		UParticleSystemComponent* ParticleEmitter = nullptr;
+
 };

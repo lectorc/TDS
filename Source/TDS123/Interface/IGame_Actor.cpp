@@ -9,3 +9,13 @@ EPhysicalSurface IIGame_Actor::GetSurfaceType()
 {
     return EPhysicalSurface();
 }
+
+
+
+
+
+
+bool IIGame_Actor::AviableForEffectsOnlyCPP()
+{
+    return true;
+}

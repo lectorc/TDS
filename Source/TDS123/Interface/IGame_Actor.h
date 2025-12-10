@@ -24,4 +24,12 @@ class TDS123_API IIGame_Actor
 public:
 
 	virtual EPhysicalSurface GetSurfaceType();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Event")
+	 void AviableForEffectsBP();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Event")
+	 bool AviableForEffects();
+
+	 virtual bool AviableForEffectsOnlyCPP();
 };

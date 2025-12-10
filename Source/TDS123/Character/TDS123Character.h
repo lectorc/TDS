@@ -171,7 +171,7 @@ public:
     UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
     int32 CurrentIndexWeapon = 0;
 
-   
+    bool AviableForEffects_Implementation() override; 
 
 
 
