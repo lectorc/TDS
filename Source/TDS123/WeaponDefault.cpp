@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/StaticMeshActor.h"
 #include "TDS123/Character/TDS123InventoryComponent.h"
+#include "TDS123/Interface/IGame_Actor.h"
 #include "TDS123/StateEffect.h"
 
 
@@ -277,9 +278,24 @@ inline void AWeaponDefault::Fire()
                     {
                         UGameplayStatics::PlaySoundAtLocation(GetWorld(), WeaponSetting.ProjectileSetting.HitSound, Hit.ImpactPoint);
                     }
+
+                    IIGame_Actor* myInterface = Cast<IIGame_Actor>(Hit.GetActor());
+                    if (myInterface)
+                    {
+                        myInterface->AviableForEffectsOnlyCPP();
+                    }
+
+                    if (Hit.GetActor()->GetClass()->ImplementsInterface(UIGame_Actor::StaticClass()))
+                    {
+                        IIGame_Actor::Execute_AviableForEffects(Hit.GetActor());
+                        IIGame_Actor::Execute_AviableForEffectsBP(Hit.GetActor());
+                    }
+                
+
+
                     UStateEffect* NewEffect = NewObject<UStateEffect>(Hit.GetActor(), FName("Effect"));
 
-                    UGameplayStatics::ApplyDamage(Hit.GetActor(), WeaponSetting.ProjectileSetting.ProjectileDamage, GetInstigatorController(), this, NULL);
+                    UGameplayStatics::ApplyPointDamage(Hit.GetActor(), WeaponSetting.ProjectileSetting.ProjectileDamage, Hit.TraceStart, Hit, GetInstigatorController(), this, NULL);
                 }
             }
           }

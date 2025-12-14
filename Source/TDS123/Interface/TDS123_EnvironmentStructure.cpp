@@ -32,9 +32,9 @@ bool ATDS123_EnvironmentStructure::AviableForEffects_Implementation()
 	return true;
 }
 
-bool ATDS123_EnvironmentStructure::AviableForEffectsOnlyCPP()
-{
-	UE_LOG(LogTemp, Warning, TEXT("ATDS123EnvironmentStructure::AviableForEffectsOnlyCPP"))
-	return true;
-}
+//bool ATDS123_EnvironmentStructure::AviableForEffectsOnlyCPP()
+//{
+//	UE_LOG(LogTemp, Warning, TEXT("ATDS123EnvironmentStructure::AviableForEffectsOnlyCPP"))
+//	return true;
+//}
 

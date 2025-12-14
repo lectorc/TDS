@@ -17,5 +17,5 @@ EPhysicalSurface IIGame_Actor::GetSurfaceType()
 
 bool IIGame_Actor::AviableForEffectsOnlyCPP()
 {
-    return true;
+    return true;        
 }

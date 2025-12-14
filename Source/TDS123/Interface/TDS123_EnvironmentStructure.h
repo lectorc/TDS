@@ -8,7 +8,7 @@
 #include "TDS123_EnvironmentStructure.generated.h"
 
 UCLASS()
-class TDS123_API ATDS123_EnvironmentStructure : public AActor, public IIGame_Actor
+class TDS123_API ATDS123_EnvironmentStructure : public AActor //public IIGame_Actor
 {
 	GENERATED_BODY()
 	
@@ -26,5 +26,5 @@ public:
 
 
 	bool AviableForEffects_Implementation();
-	bool AviableForEffectsOnlyCPP() override;
+	//bool AviableForEffectsOnlyCPP() override;
 };
