@@ -21,7 +21,16 @@ public:
 	virtual bool InitObject(AActor* Actor);
 	virtual void DestroyObject();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setting")
+	TArray<TEnumAsByte<EPhysicalSurface>> PossibleInteractSurface;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setting")
+	bool bIsStakable = false;
+
 	AActor* myActor = nullptr;
+
+
+
 };
 
 

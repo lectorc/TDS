@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "TDS123/StateEffect.h"
 #include "IGame_Actor.generated.h"
 
 // This class does not need to be modified.
@@ -32,4 +33,5 @@ public:
 	 bool AviableForEffects();
 
 	 virtual bool AviableForEffectsOnlyCPP();
+	 virtual TArray<UStateEffect*> GetAllCurrentEffects();
 };

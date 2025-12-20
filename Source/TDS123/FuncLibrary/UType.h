@@ -93,6 +93,9 @@ struct FProjectileInfo
     float ExplodeMaxDamage = 40.0f;
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explode")
     float ExplodeFalloffCoef = 1.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effect")
+    TSubclassOf<UStateEffect> Effect = nullptr;
     //Timer add
 };
 
@@ -295,5 +298,9 @@ UCLASS()
 class TDS123_API UType : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()
+
+public:
+    UFUNCTION(BlueprintCallable)
+    static void AddEffectBySurfaceType(AActor* TakeEffectActor, TSubclassOf<UStateEffect> AddEffectClass, EPhysicalSurface SurfaceType);
 };
 

@@ -218,18 +218,18 @@ inline void AWeaponDefault::Fire()
         for (int8 i = 0; i < NumberProjectile; i++)//Shotgun
         {
             EndLocation = GetFireEndLocation();
-            
-
-
-
 
             if (ProjectileInfo.Projectile)
             {
                 //Projectile Init ballistic fire
                 FVector Dir = EndLocation - SpawnLocation;
+
                 Dir.Normalize();
-                FMatrix MyMatrix(Dir, FVector(0, 1, 0), FVector(0, 0, 1), FVector::ZeroVector);
-                SpawnRotation = MyMatrix.Rotator();
+
+                FMatrix myMatrix(Dir, FVector(0, 1, 0), FVector(0, 0, 1), FVector::ZeroVector);
+                SpawnRotation = myMatrix.Rotator();
+
+
 
                 FActorSpawnParameters SpawnParams;
                 SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -239,30 +239,37 @@ inline void AWeaponDefault::Fire()
                 AProjectileDefault* myProjectile = Cast<AProjectileDefault>(GetWorld()->SpawnActor(ProjectileInfo.Projectile, &SpawnLocation, &SpawnRotation, SpawnParams));
                 if (myProjectile)
                 {
-                    //ToDo Init Projectile settings by id in table row(or keep in weapon table)
                     myProjectile->InitProjectile(WeaponSetting.ProjectileSetting);
-                    //Projectile->BulletProjectileMovement->InitialSpeed = 2500.0f;
                 }
             }
             else
             {
                 FHitResult Hit;
                 TArray<AActor*> Actors;
-                UKismetSystemLibrary::LineTraceSingle(GetWorld(), SpawnLocation, EndLocation * WeaponSetting.DistanceTrace, ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
 
+                EDrawDebugTrace::Type DebugTrace;
                 if (ShowDebug)
-                    DrawDebugLine(GetWorld(), SpawnLocation, SpawnLocation + ShootLocation->GetForwardVector() * WeaponSetting.DistanceTrace, FColor::Black, false, 5.f,
-                        (uint8)'\000', 0.5f);
+                {
+                    DrawDebugLine(GetWorld(), SpawnLocation, SpawnLocation + ShootLocation->GetForwardVector() * WeaponSetting.DistanceTrace, FColor::Black, false, 5.f, (uint8)'\000', 0.5f);
+                    DebugTrace = EDrawDebugTrace::ForDuration;
+                }
+                else
+                    DebugTrace = EDrawDebugTrace::None;
+
+                UKismetSystemLibrary::LineTraceSingle(GetWorld(), SpawnLocation, EndLocation * WeaponSetting.DistanceTrace,
+                    ETraceTypeQuery::TraceTypeQuery4, false, Actors, DebugTrace, Hit, true, FLinearColor::Red, FLinearColor::Green, 5.0f);
 
                 if (Hit.GetActor() && Hit.PhysMaterial.IsValid())
                 {
                     EPhysicalSurface mySurfacetype = UGameplayStatics::GetSurfaceType(Hit);
+
                     if (WeaponSetting.ProjectileSetting.HitDecals.Contains(mySurfacetype))
                     {
                         UMaterialInterface* myMaterial = WeaponSetting.ProjectileSetting.HitDecals[mySurfacetype];
+
                         if (myMaterial && Hit.GetComponent())
                         {
-                            UGameplayStatics::SpawnDecalAttached(myMaterial, FVector(20.0f), Hit.GetComponent(), NAME_None, Hit.ImpactPoint, Hit.ImpactNormal.Rotation(), EAttachLocation::KeepWorldPosition);
+                            UGameplayStatics::SpawnDecalAttached(myMaterial, FVector(20.0f), Hit.GetComponent(), NAME_None, Hit.ImpactPoint, Hit.ImpactNormal.Rotation(), EAttachLocation::KeepWorldPosition, 10.0f);
                         }
                     }
                     if (WeaponSetting.ProjectileSetting.HitFXs.Contains(mySurfacetype))
@@ -279,27 +286,22 @@ inline void AWeaponDefault::Fire()
                         UGameplayStatics::PlaySoundAtLocation(GetWorld(), WeaponSetting.ProjectileSetting.HitSound, Hit.ImpactPoint);
                     }
 
-                    IIGame_Actor* myInterface = Cast<IIGame_Actor>(Hit.GetActor());
-                    if (myInterface)
-                    {
-                        myInterface->AviableForEffectsOnlyCPP();
-                    }
+
+                    UType::AddEffectBySurfaceType(Hit.GetActor(), ProjectileInfo.Effect, mySurfacetype);
 
                     if (Hit.GetActor()->GetClass()->ImplementsInterface(UIGame_Actor::StaticClass()))
                     {
-                        IIGame_Actor::Execute_AviableForEffects(Hit.GetActor());
-                        IIGame_Actor::Execute_AviableForEffectsBP(Hit.GetActor());
+                   	IIGame_Actor::Execute_AviableForEffects(Hit.GetActor());
+                    IIGame_Actor::Execute_AviableForEffectsBP(Hit.GetActor());
                     }
-                
-
-
-                    UStateEffect* NewEffect = NewObject<UStateEffect>(Hit.GetActor(), FName("Effect"));
 
                     UGameplayStatics::ApplyPointDamage(Hit.GetActor(), WeaponSetting.ProjectileSetting.ProjectileDamage, Hit.TraceStart, Hit, GetInstigatorController(), this, NULL);
+                    //UGameplayStatics::ApplyDamage(Hit.GetActor(), WeaponSetting.ProjectileSetting.ProjectileDamage, GetInstigatorController(), this, NULL);
                 }
+
             }
-          }
         }
+    }
 
 
     if (GetWeaponRound() <= 0 && !WeaponReloading)

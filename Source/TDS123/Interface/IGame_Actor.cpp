@@ -19,3 +19,11 @@ bool IIGame_Actor::AviableForEffectsOnlyCPP()
 {
     return true;        
 }
+
+
+
+TArray<UStateEffect*> IIGame_Actor::GetAllCurrentEffects()
+{
+	TArray<UStateEffect*> Effect;
+	return Effect;
+}
