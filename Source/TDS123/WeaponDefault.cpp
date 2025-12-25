@@ -219,8 +219,8 @@ inline void AWeaponDefault::Fire()
         {
             EndLocation = GetFireEndLocation();
 
-            if (ProjectileInfo.Projectile)
-            {
+           // if (ProjectileInfo.Projectile)
+           // {
                 //Projectile Init ballistic fire
                 FVector Dir = EndLocation - SpawnLocation;
 
@@ -241,9 +241,9 @@ inline void AWeaponDefault::Fire()
                 {
                     myProjectile->InitProjectile(WeaponSetting.ProjectileSetting);
                 }
-            }
-            else
-            {
+            //}
+            //else
+          //  {
                 FHitResult Hit;
                 TArray<AActor*> Actors;
 
@@ -299,7 +299,7 @@ inline void AWeaponDefault::Fire()
                     //UGameplayStatics::ApplyDamage(Hit.GetActor(), WeaponSetting.ProjectileSetting.ProjectileDamage, GetInstigatorController(), this, NULL);
                 }
 
-            }
+           // }
         }
     }
 
